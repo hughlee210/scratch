@@ -1,0 +1,2 @@
+# my-scratch
+java examples
