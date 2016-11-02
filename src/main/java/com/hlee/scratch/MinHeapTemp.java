@@ -23,7 +23,7 @@ public class MinHeapTemp {
 			heap.extractMin();
 		}
 
-		// Now get min returns Kth smallest
+		// Now getMin() returns Kth smallest
 		int kthElement = heap.getMin();
 		return kthElement;
 	}
