@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.corejava.concurrent;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;

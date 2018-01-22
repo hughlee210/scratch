@@ -15,6 +15,14 @@ public class Anagram {
         System.out.println(s1 + " and " + s2 + " are anagram to each other (using char count flag)? " + isAnagram_usingFlag(s1, s2));
 
         System.out.println(s1 + " and " + s2 + " are anagram to each other (using hash map)?        " + isAnagram_usingHashMap(s1, s2));
+
+        char[] arr = { 'a', 'b', 'c', '1', '2', '3' };
+        for (char ch : arr) {
+            System.out.println(ch + " = " + (int) ch);
+        }
+        //        for (int i = 0; i < 256; i++) {
+        //            System.out.println(i + " = " + (char) i);
+        //        }
     }
 
     /**
@@ -47,9 +55,11 @@ public class Anagram {
             return false;
 
         int[] charCounts = new int[256]; // assume ascii characters
+        // count chars in string1
         for (char ch : s1.toCharArray()) {
             charCounts[ch]++;
         }
+        // compare char counts in string2 with those in string1
         for (char ch : s2.toCharArray()) {
             // charCounts[ch]--;
             if (--charCounts[ch] < 0)
@@ -62,23 +72,23 @@ public class Anagram {
      *  time: O(N), space: O(N)
      */
     public static boolean isAnagram_usingHashMap(String s1, String s2) {
-        Map<Character, Integer> charCounts = new HashMap<>(); // space: O(N)
+        Map<Character, Integer> countsMap = new HashMap<>(); // space: O(N)
 
         // time: O(N)
         for (char ch : s1.toCharArray()) {
-            if (charCounts.containsKey(ch)) {
-                charCounts.put(ch, charCounts.get(ch) + 1);
+            if (countsMap.containsKey(ch)) {
+                countsMap.put(ch, countsMap.get(ch) + 1);
             } else {
-                charCounts.put(ch, 1);
+                countsMap.put(ch, 1);
             }
         }
         // time: O(N)
         for (char ch : s2.toCharArray()) {
-            if (charCounts.containsKey(ch)) {
-                if (charCounts.get(ch) == 0) {
+            if (countsMap.containsKey(ch)) {
+                if (countsMap.get(ch) == 0) {
                     return false;
                 }
-                charCounts.put(ch, charCounts.get(ch) - 1);
+                countsMap.put(ch, countsMap.get(ch) - 1);
             } else {
                 return false;
             }

@@ -18,19 +18,23 @@ public class BinarySearch {
 
         int[] rotatedArr = { 5, 6, 7, 8, 9, 1, 2, 3, 4 };
         index = indexOfMinElement(rotatedArr);
-        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", min index: " + +index);
+        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", min index in rotated sorted array: " + +index);
 
         int[] rArr = { 6, 1, 2, 3, 4, 5 };
         index = indexOfMinElement(rArr);
-        System.out.println("arr: " + Arrays.toString(rArr) + ", min index: " + index);
+        System.out.println("arr: " + Arrays.toString(rArr) + ", min index in rotated sorted array: " + index);
+
+        int[] rArr2 = { 6, -10, 2, 3, 4, 5 };
+        index = indexOfMinElement(rArr2);
+        System.out.println("arr: " + Arrays.toString(rArr2) + ", min index in rotated sorted array: " + index);
 
         key = 1;
         index = indexOfElementInRotatedArray(rotatedArr, key);
-        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", key: " + key + " -> key index in rotated arr: " + index);
+        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", key: " + key + " -> key index in rotated sorted arr: " + index);
 
         key = 7;
         index = indexOfElementInRotatedArray(rotatedArr, key);
-        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", key: " + key + " -> key index in rotated arr: " + index);
+        System.out.println("arr: " + Arrays.toString(rotatedArr) + ", key: " + key + " -> key index in rotated sorted arr: " + index);
 
     }
 
@@ -45,6 +49,7 @@ public class BinarySearch {
         int lo = 0;
         int hi = arr.length - 1;
         while (lo < hi) {
+            // mid = (lo + hi) / 2; // this can cause integer overflow
             int mid = lo + (hi - lo) / 2; // to avoid integer overflow
             if (key == arr[mid])
                 return mid;
@@ -57,7 +62,7 @@ public class BinarySearch {
     }
 
     /**
-     * time: O(logN), space:  
+     * time: O(logN), space: O(logN) call stack frames
      */
     public static int rBS(int[] arr, int key, int lo, int hi) {
         if (arr == null || arr.length == 0)
@@ -79,30 +84,31 @@ public class BinarySearch {
      * array, so more general than binary search as it works for both rotated
      * and non-rotated arrays.
      * In rotated sorted array [5,6,7,8,9,1,2,3,4], 
-     * leftmost element is always greater than rightmost element if array is sorted.
+     * leftmost element is always greater than rightmost element if array is rotated.
      */
     public static int indexOfElementInRotatedArray(int[] arr, int key) {
         if (arr == null || arr.length == 0)
             return -1;
         int lo = 0;
         int hi = arr.length - 1;
-        while (lo <= hi) {
+        while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
-            if (key == arr[mid])
+            if (key == arr[mid]) {
                 return mid;
+            }
             // now check two parts: first half < mid and second half >= mid element
             if (arr[lo] < arr[mid]) {
                 // left half is sorted, so check if key is in this half
                 if (arr[lo] <= key && key < arr[mid])
                     hi = mid - 1;
                 else
-                    lo = mid + 1;
+                    lo = mid;
             } else {
                 // right half is sorted, so check if key is in this half
                 if (arr[mid] < key && key <= arr[hi])
                     lo = mid + 1;
                 else
-                    hi = mid - 1;
+                    hi = mid;
             }
         }
         return -1;
@@ -112,7 +118,7 @@ public class BinarySearch {
      * Find rotation pivot index. Works for both rotated and non-rotated array.
      * Return the index of min element in rotated sorted array.
      * In rotated sorted array [3,4,5,1,2],
-     * leftmost element is always greater than rightmost element if sorted,
+     * leftmost element is always greater than rightmost element if rotated,
      * otherwise min element is the 1st element. 
      */
     public static int indexOfMinElement(int[] arr) {
@@ -131,6 +137,11 @@ public class BinarySearch {
                 lo = mid + 1;
         }
         return lo;
+    }
+
+    static int indexOfMinElem_ex(int[] arr) {
+        // exercise
+        return -1;
     }
 
 }

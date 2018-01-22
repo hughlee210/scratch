@@ -5,7 +5,7 @@ public class Palindrome {
     public static void main(String[] args) {
         String str = "abcba";
         boolean isPalindrome = isPalindrome(str.toCharArray());
-        System.out.println(str + " is palindrome: " + isPalindrome);
+        System.out.println(str + " is a palindrome? " + isPalindrome);
     }
 
     // time: O(n/2), space: O(1)

@@ -12,6 +12,8 @@ public class NumberString {
 		System.out.println(str + " is a valid number? " + isNumber(str));
 		str = "1";
 		System.out.println(str + " is a valid number? " + isNumber(str));
+        str = "-12.1";
+        System.out.println(str + " is a valid number? " + isNumber(str));
 		str = "-12.123";
 		System.out.println(str + " is a valid number? " + isNumber(str));
 
@@ -24,6 +26,8 @@ public class NumberString {
 		System.out.println(str + " is a valid number? " + isNumberUsingRegex(str));
 		str = "1";
 		System.out.println(str + " is a valid number? " + isNumberUsingRegex(str));
+        str = "-12.1";
+        System.out.println(str + " is a valid number? " + isNumber(str));
 		str = "-12.123";
 		System.out.println(str + " is a valid number? " + isNumberUsingRegex(str));
 		
@@ -56,7 +60,7 @@ public class NumberString {
 	}
 
 	public static boolean isNumberUsingRegex(String str) {
-		return str.matches("-?[1-9]\\d*(\\.\\d)?");
+        return str.matches("-?[1-9]\\d*(\\.\\d)?");
 	}
 
 }

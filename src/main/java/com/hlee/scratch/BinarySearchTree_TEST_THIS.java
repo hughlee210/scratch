@@ -1,6 +1,5 @@
 package com.hlee.scratch;
 
-import java.util.LinkedList;
 import java.util.Stack;
 
 public class BinarySearchTree_TEST_THIS {
@@ -113,7 +112,7 @@ public class BinarySearchTree_TEST_THIS {
 	}
 	
 	public void inOrderIterative(Node node) {
-		Stack<Node> parentStack = new Stack<BinarySearchTree_TEST_THIS.Node>();
+        Stack<Node> parentStack = new Stack<>();
 		while (!parentStack.isEmpty() || node != null) {
 			if (node != null) {
 				parentStack.push(node);
@@ -136,7 +135,7 @@ public class BinarySearchTree_TEST_THIS {
 	}
 	
 	public void preOrderIter(Node node) {
-		Stack<Node> parentStack = new Stack<BinarySearchTree_TEST_THIS.Node>();
+        Stack<Node> parentStack = new Stack<>();
 		//parentStack.push(null);
 		Node top = node;
 		while (top != null) {
@@ -171,7 +170,7 @@ public class BinarySearchTree_TEST_THIS {
 
 	// Using stack pop count
 	public Node inOrderIterativeKthSmallest(Node node, int k) {
-		Stack<Node> parentStack = new Stack<BinarySearchTree_TEST_THIS.Node>();
+        Stack<Node> parentStack = new Stack<>();
 		int popCount = 0;
 		while (!parentStack.isEmpty() || node != null) {
 			if (node != null) {

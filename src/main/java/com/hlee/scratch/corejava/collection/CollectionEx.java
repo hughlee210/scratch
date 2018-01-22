@@ -1,9 +1,7 @@
-package com.hlee.scratch.collection;
+package com.hlee.scratch.corejava.collection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,17 +15,19 @@ public class CollectionEx {
         testSet();
         testIterRemove();
         testReference();
+        testReference_mutableElement();
         testSetEquals();
 
         Set<String> mySet = new HashSet<>();
         mySet.add("elem1");
         mySet.add("elem2");
         mySet.add("elem3");
-        System.out.println("before testMutateParam() method call: set = " + mySet);
-        testMutateParam(new HashSet<>(mySet));
-        System.out.println("after  testMutateParam() method call: set = " + mySet);
+        System.out.println("before calling testMutateParam() method: set = " + mySet);
+        testMutateParam(new HashSet<>(mySet)); // passing new hash set with the same elements in mySet
+        System.out.println("after  calling testMutateParam() method: set = " + mySet);
 
         testCasting();
+
     }
 
     private static void testSet() {
@@ -108,14 +108,49 @@ public class CollectionEx {
         System.out.println("list1: " + list1);
 
         List<String> list2 = list1;
-        list2.add(s3); // s3 is added to list1
+        list2.add(s3); // result = s3 is added to list1
         System.out.println("list1: " + list1);
 
         List<String> list3 = new ArrayList<>(list2);
         System.out.println("list2: " + list2);
         System.out.println("list3: " + list3);
         System.out.println("adding " + s4 + " to list3");
-        list3.add(s4); // s4 is not added to list2
+        list3.add(s4); // result = s4 is not added to list2
+        System.out.println("list2: " + list2);
+        System.out.println("list3: " + list3);
+        
+        System.out.println("modifying first element in list3");
+        list3.set(0, "a1"); // modify first element in list3
+        System.out.println("list2: " + list2);
+        System.out.println("list3: " + list3);
+
+        System.out.println("-------------------");
+    }
+
+    private static void testReference_mutableElement() {
+        List<StringBuilder> list1 = new ArrayList<>();
+        StringBuilder s1 = new StringBuilder("a");
+        StringBuilder s2 = new StringBuilder("b");
+        StringBuilder s3 = new StringBuilder("c");
+        StringBuilder s4 = new StringBuilder("d");
+        list1.add(s1);
+        list1.add(s2);
+        System.out.println("list1: " + list1);
+
+        List<StringBuilder> list2 = list1;
+        list2.add(s3); // result = s3 is added to list1
+        System.out.println("list1: " + list1);
+
+        List<StringBuilder> list3 = new ArrayList<>(list2);
+        System.out.println("list2: " + list2);
+        System.out.println("list3: " + list3);
+        System.out.println("adding " + s4 + " to list3");
+        list3.add(s4); // result = s4 is not added to list2
+        System.out.println("list2: " + list2);
+        System.out.println("list3: " + list3);
+
+        System.out.println("modifying first element in list3");
+        list3.set(0, list3.get(0).append("1")); // result = modifying first element in list3 results in the element updated in list2
         System.out.println("list2: " + list2);
         System.out.println("list3: " + list3);
         System.out.println("-------------------");
@@ -144,10 +179,10 @@ public class CollectionEx {
     }
 
     private static void testMutateParam(Set<String> set) {
-        System.out.println("in testMutateParam() method set = " + set);
+        System.out.println("  in testMutateParam() method set = " + set);
         System.out.println("   clearing the set");
         set.clear();
-        System.out.println("in testMutateParam() method set = " + set);
+        System.out.println("  in testMutateParam() method set = " + set);
     }
 
     private static void testCasting() {

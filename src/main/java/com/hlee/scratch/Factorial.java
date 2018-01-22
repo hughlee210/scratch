@@ -4,22 +4,47 @@ public class Factorial {
 
     public static void main(String[] args) {
 
-        System.out.println("factorial of 4 = " + fact_it(4));
+        int input = 5;
+        System.out.println("factorial of " + input + " = " + fact(input, 1));
+
+        input = 10;
+        System.out.println("factorial of " + input + " = " + fact(input, 1));
     }
 
     // pre-condition: n >= 1
-    static int fact(int n) {
-        if (n == 1)
+    static int fact(int n, int count) {
+        System.out.println("exec count = " + count);
+        assert n >= 0;
+        if (n == 0)
             return 1;
         else
-            return n * fact(n - 1);
+            return n * fact(n - 1, ++count);
+    }
+
+    static int fact_ex(int n) {
+        // exercise
+        assert n >= 0;
+        if (n == 0)
+            return 1;
+        else
+            return n * fact_ex(n - 1);
     }
 
     static int fact_it(int n) {
-        int fact = 1;
-        for (int i = 1; i <= n; i++) {
-            fact = fact * i;
+        assert n >= 0;
+        int result = 1;
+        for (int i = 2; i <= n; i++) {
+            result = result * i;
         }
-        return fact;
+        return result;
+    }
+
+    static int fact_it_ex(int n) {
+        assert n >= 0;
+        int result = 1;
+        for (int i = n; i > 1; i--) {
+            result = result * i;
+        }
+        return result;
     }
 }

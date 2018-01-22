@@ -27,6 +27,8 @@ public class BinaryTree<T> {
         System.out.println("  count = " + count);
         count = 0;
 
+        System.out.println("Is this tree a BST? " + bt.isBst());
+
         List<Integer> list = new ArrayList<>();
         bt.inOrderRecur(bt.root, list);
         System.out.println("list converted from BST = " + list);
@@ -63,6 +65,25 @@ public class BinaryTree<T> {
 
     static int count = 0;
 
+    boolean isBst() {
+        return isBst((Node<Integer>) this.root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    // time complexity: O(N)
+    // space: O(1) if Function Call Stack size is not considered, otherwise O(N)
+    boolean isBst(Node<Integer> node, int min, int max) {
+        // empty tree is BST
+        if (node == null)
+            return true;
+
+        // false if node value is not between min and max
+        if (node.value < min || node.value > max)
+            return false;
+
+        // check sub trees recursively with updated min max range
+        return isBst(node.left, min, node.value - 1) && isBst(node.right, node.value + 1, max);
+    }
+
     /**
      * time: O(N), space: O(height of tree)
      * The space complexity of this traversal seems to be O(h) where h is height of tree. 
@@ -80,6 +101,9 @@ public class BinaryTree<T> {
         printInorderRecursive(node.right);
     }
 
+    // ...4
+    // .2...6
+    // 1 3 5 7
     /**
      * time: O(N), space: O(height of tree) = O(logN) if BST 
      */
@@ -103,8 +127,9 @@ public class BinaryTree<T> {
     }
 
     public List<T> visitInOrder_ex(boolean print) {
+        // exercise
         List<T> list = new ArrayList<>();
-        Node<T> node = this.root;
+        Node<T> node = root;
         Stack<Node<T>> parentStack = new Stack<>();
         while (!parentStack.isEmpty() || node != null) {
             if (node != null) {
@@ -121,10 +146,62 @@ public class BinaryTree<T> {
         return list;
     }
 
+    void inOrderRecur(Node<T> node, List<T> list) {
+        if (node == null)
+            return;
+        inOrderRecur(node.left, list);
+        list.add(node.value);
+        inOrderRecur(node.right, list);
+    }
+
+    void inOrderRecur_ex(Node<T> node, List<T> list) {
+        // exercise
+        if (node == null)
+            return;
+        inOrderRecur_ex(node.left, list);
+        list.add(node.value);
+        inOrderRecur_ex(node.right, list);
+    }
+
+    List<T> inOrderIter(Node<T> root) {
+        List<T> list = new ArrayList<>();
+        Node<T> node = root;
+        Stack<Node<T>> parentStack = new Stack<>();
+        while (!parentStack.isEmpty() || node != null) {
+            if (node != null) {
+                parentStack.push(node);
+                node = node.left;
+            } else {
+                node = parentStack.pop();
+                list.add(node.value);
+                node = node.right;
+            }
+        }
+        return list;
+    }
+
+    List<T> inOrderIter_ex(Node<T> root) {
+        // exercise
+        List<T> list = new ArrayList<>();
+        Node<T> node = root;
+        Stack<Node<T>> parentStack = new Stack<>();
+        while (!parentStack.isEmpty() || node != null) {
+            if (node != null) {
+                parentStack.push(node);
+                node = node.left;
+            } else {
+                node = parentStack.pop();
+                list.add(node.value);
+                node = node.right;
+            }
+        }
+        return list;
+    }
+
     // time complexity: O(N), space: O(N)
     public void findSumPair_usingArray(int sum) {
-        // assume the tree is BST, so converted list is sorted in ascending order
-        List<Integer> list = (List<Integer>) visitInOrder(false); // time: O(N), space: O(N) for list 
+        // assume the tree is BST, so converted list using in-order traversal is sorted in ascending order
+        List<Integer> list = (List<Integer>) visitInOrder(false); // time: O(N), space: O(logN) + O(N) for list 
         // now we have sorted list
         int l = 0;
         int r = list.size() - 1;
@@ -146,8 +223,27 @@ public class BinaryTree<T> {
 
     // time: O(n), space: O(n)
     void findSumPair_usingArray_ex(int sum) {
-        // given root of BST
-        // obtain a sorted list/array using in-order traversal of BST
+        // Exercise
+        // given root of BST, obtain a sorted list/array using in-order traversal of BST
+        List<Integer> list = (List<Integer>) inOrderIter(this.root); // time: O(N), space: O(logN) + O(N) for list
+        int l = 0, r = list.size() - 1;
+        while (l < r) {
+            if (list.get(l) + list.get(r) == sum) {
+                System.out.println("found a pair for sum " + sum + " = " + list.get(l) + " + " + list.get(r));
+                l++;
+                r--;
+            } else if (list.get(l) + list.get(r) < sum) {
+                l++;
+            } else {
+                r--;
+            }
+        }
+    }
+    
+    // time: O(N), space: O(N)
+    void findSumPair_usingSortedList_ex(int sum) {
+        // Exercise
+        // given root of BST, obtain a sorted list using in-order traversal of BST
         List<Integer> list = (List<Integer>) inOrderIter(this.root);
         int l = 0, r = list.size() - 1;
         while (l < r) {
@@ -163,36 +259,11 @@ public class BinaryTree<T> {
         }
     }
 
-    void inOrderRecur(Node<T> node, List<T> list) {
-        if (node == null)
-            return;
-        inOrderRecur(node.left, list);
-        list.add(node.value);
-        inOrderRecur(node.right, list);
-    }
-
-    List<T> inOrderIter(Node<T> root) {
-        List<T> list = new ArrayList<>();
-        Node<T> node = root;
-        Stack<Node<T>> parentStack = new Stack<>();
-        while (!parentStack.isEmpty() || node != null) {
-            if (node != null) {
-                parentStack.push(node);
-                node = node.left;
-            } else {
-                node = parentStack.pop();
-                list.add(node.value);
-                node = node.right;
-            }
-        }
-        return list;
-    }
-
     // time complexity: O(N), space: O(logN)
     public void findSumPair_usingStack(int sum) {
         // assume the tree is BST
-        Stack<Node<Integer>> stack1 = new Stack<BinaryTree.Node<Integer>>();
-        Stack<Node<Integer>> stack2 = new Stack<BinaryTree.Node<Integer>>();
+        Stack<Node<Integer>> stack1 = new Stack<>();
+        Stack<Node<Integer>> stack2 = new Stack<>();
         boolean stop1 = false, stop2 = false;
         int val1 = 0, val2 = 0;
         Node<Integer> node1 = (Node<Integer>) root;

@@ -27,6 +27,7 @@ public class LongestSubstringWithNoDupChars {
                 maxLen = Math.max(maxLen, curr - start);
                 start = charPosMap.get(ch) + 1;
             }
+            // update the position of the current character
             charPosMap.put(ch, curr);
             curr++;
         }

@@ -1,4 +1,4 @@
-package com.hlee.scratch.examplePrintCountry;
+package com.hlee.scratch.corejava.printCountry;
 
 public class Country {
 

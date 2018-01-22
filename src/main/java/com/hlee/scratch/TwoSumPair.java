@@ -15,10 +15,10 @@ public class TwoSumPair {
         System.out.println("***using brute force");
         findSumPair_bruteForce(arr, sum);
 
-        System.out.println("***using sort");
+        System.out.println("***using sort: array = " + Arrays.toString(arr));
         findSumPair_usingSort(arr, sum);
 
-        System.out.println("***using hash map");
+        System.out.println("***using hash map: array = " + Arrays.toString(arr));
         findSumPair_usingHashMap(arr, sum);
 
         System.out.println("************ triplet for sum *************");
@@ -57,17 +57,18 @@ public class TwoSumPair {
     static void findSumPair_usingSort(int[] arr, int sum) {
         if (arr == null || arr.length == 0)
             return;
-        Arrays.sort(arr); // O(nlogn)
+        int[] arr2 = Arrays.copyOf(arr, arr.length);
+        Arrays.sort(arr2); // O(nlogn)
         int l = 0;
-        int r = arr.length - 1;
+        int r = arr2.length - 1;
         // time: O(n/2)
         while (l < r) {
-            if (arr[l] + arr[r] > sum)
+            if (arr2[l] + arr2[r] > sum)
                 r--;
-            else if (arr[l] + arr[r] < sum)
+            else if (arr2[l] + arr2[r] < sum)
                 l++;
             else {
-                System.out.println("found two num for sum: " + arr[l] + " + " + arr[r] + " = " + sum);
+                System.out.println("found two num for sum: " + arr2[l] + " + " + arr2[r] + " = " + sum);
                 l++;
                 r--;
             }
@@ -105,7 +106,7 @@ public class TwoSumPair {
         Map<Integer, Integer> numMap = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
             if (numMap.containsKey(sum - arr[i]))
-                System.out.println("found a pair for sum: " + sum + " = " + (sum - arr[i]) + " + " + arr[i]);
+                System.out.println("found a pair for sum: " + sum + " = " + (sum - arr[i]) + "(at index " + numMap.get(sum - arr[i]) + ") + " + arr[i] + "(at index " + i + ")");
             else
                 numMap.put(arr[i], i);
         }

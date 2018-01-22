@@ -17,6 +17,7 @@ public class StringSearch {
     static int indexOf_ex(String str, String subStr) {
         if (str == null || str.length() == 0 || subStr == null || subStr.length() == 0)
             return -1;
+
         int i = 0, j = 0;
         while (i < str.length() && j < subStr.length()) {
             if (str.charAt(i) == subStr.charAt(j)) {

@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Interval {
 
     Integer start;
@@ -20,6 +23,29 @@ public class Interval {
         return "[" + start + ", " + end + "]";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Interval))
+            return false;
+
+        Interval that = (Interval) obj;
+        if (this == that)
+            return true;
+
+        return new EqualsBuilder()
+                .append(this.start, that.start)
+                .append(this.end, that.end)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(this.start)
+                .append(this.end)
+                .hashCode();
+    }
+
     public static void main(String[] args) {
         //        For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8} }. 
         //        The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}. 
@@ -30,43 +56,63 @@ public class Interval {
         list.add(new Interval(1, 3));
         list.add(new Interval(5, 7));
         list.add(new Interval(6, 8));
-        //System.out.println("original list: " + list);
+        list.add(new Interval(1, 3));
+        list.add(new Interval(9, 12));
+        list.add(new Interval(10, 15));
+        System.out.println("original list: " + list);
 
-        mergeIntervals(list);
+        List<Interval> result = merge(list);
+        System.out.println("result list: " + result);
+        System.out.println("===================================");
 
+        test1();
     }
 
-    static void mergeIntervals(List<Interval> intervals) {
+    static void test1() {
+        List<Interval> list = new ArrayList<>();
+        list.add(new Interval(3, 5));
+        list.add(new Interval(1, 7));
+        list.add(new Interval(8, 12));
+        System.out.println("original list: " + list);
+
+        List<Interval> result = merge(list);
+        System.out.println("result list: " + result);
+        System.out.println("===================================");
+    }
+
+    static List<Interval> merge(List<Interval> intervals) {
+        List<Interval> result = new ArrayList<Interval>();
+        if (intervals == null || intervals.size() == 0)
+            return result;
+
+        // Time complexity: O(NlogN)
         Collections.sort(intervals, new Comparator<Interval>() {
-            @Override
-            public int compare(Interval o1, Interval o2) {
-                return o1.start.compareTo(o2.start);
+            public int compare(Interval i1, Interval i2) {
+                if (i1.start != i2.start)
+                    return i1.start - i2.start;
+                else
+                    return i1.end - i2.end;
             }
         });
         System.out.println("sorted list: " + intervals);
 
-        List<Interval> output = new ArrayList<>();
-        for (int i = 0; i < intervals.size(); i++) {
-            Interval in1 = intervals.get(i);
-            for (int j = i + 1; j < intervals.size(); j++) {
-                Interval in2 = intervals.get(j);
-                // check if they are overlapping
-                if (in1.end >= in2.start) {
-                    // overlapping
-                    Interval mergedIn;
-                    if (in1.end < in2.end) {
-                        mergedIn = new Interval(in1.start, in2.end);
-                    } else {
-                        mergedIn = new Interval(in1.start, in1.end);
-                    }
-                    output.add(mergedIn);
-                } else {
-                    // not overlapping, so add in1 and in2 to output
-                    output.add(in1);
-                    output.add(in2);
-                }
+        Interval prev = intervals.get(0);
+        // Time: O(N)
+        for (int i = 1; i < intervals.size(); i++) {
+            Interval curr = intervals.get(i);
+            if (curr.start > prev.end) {
+                // current interval is not connected to the previous one, so add previous one to result
+                result.add(prev);
+                System.out.println("***adding " + prev);
+                prev = curr;
+            } else {
+                Interval merged = new Interval(prev.start, Math.max(prev.end, curr.end));
+                prev = merged;
+                System.out.println("***merged: " + merged);
             }
         }
-
+        result.add(prev);
+        System.out.println("***last adding " + prev);
+        return result;
     }
 }

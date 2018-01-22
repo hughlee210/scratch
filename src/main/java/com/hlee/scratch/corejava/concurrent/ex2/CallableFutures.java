@@ -1,4 +1,4 @@
-package com.hlee.scratch.concurrent.ex2;
+package com.hlee.scratch.corejava.concurrent.ex2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ public class CallableFutures {
 
         ExecutorService executor = Executors.newFixedThreadPool(NTHREDS);
         List<Future<Long>> list = new ArrayList<>();
-        for (int i = 0; i < 20000; i++) {
-            Callable<Long> worker = new MyCallable();
-            Future<Long> submit = executor.submit(worker);
-            list.add(submit);
+        for (int i = 0; i < 10; i++) {
+            Callable<Long> worker = new MyCallable("MyCallable" + i);
+            Future<Long> future = executor.submit(worker);
+            list.add(future);
         }
         long sum = 0;
         System.out.println("List of Futures: " + list.size());

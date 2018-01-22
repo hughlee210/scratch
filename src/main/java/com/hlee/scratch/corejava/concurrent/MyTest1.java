@@ -1,4 +1,4 @@
-package com.hlee.scratch.concurrent;
+package com.hlee.scratch.corejava.concurrent;
 
 import java.util.concurrent.TimeUnit;
 

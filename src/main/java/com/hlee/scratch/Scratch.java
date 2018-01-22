@@ -1,6 +1,9 @@
 package com.hlee.scratch;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Scratch {
 
@@ -24,6 +27,22 @@ public class Scratch {
         System.out.format("keyStrUTF16 string: %s, length: %d\n", keyStrUTF16, keyStrUTF16.length());
 
         testStringRegex();
+
+        testSplit();
+
+        String name = "122_null";
+        System.out.println("name: " + name);
+        System.out.println("name replaced: " + name.replace("_null", "_None"));
+
+        String testStr = "test 1 2 345_Purpose - this is test_ttt.txt";
+        System.out.println("string                    : " + testStr);
+        System.out.println("string white space removed: " + testStr.replaceAll(" ", ""));
+        
+        Map<String, String> map = new HashMap<>();
+        map.put("key1", "val1");
+        map.put("key2", "val2");
+        System.out.println(map);
+        
     }
 
     private static void testStringRegex() {
@@ -40,6 +59,19 @@ public class Scratch {
         int minNum = Integer.valueOf(sign + minute);
 
         System.out.println("hour=" + hourNum + ", minute=" + minNum);
+    }
+
+    private static void testSplit() {
+        String str = "Voucher Batch Id, Voucher Code, Control Code, Status, Use Count";
+        System.out.println("[" + str + "] split result length = " + str.split(",").length);
+        
+        str = "1,2,,4,";
+        System.out.println("[" + str + "] split result length = " + str.split(",").length);
+
+        StringTokenizer st = new StringTokenizer(str, ",");
+        while (st.hasMoreTokens()) {
+            System.out.println("token: " + st.nextToken());
+        }
     }
 
 }

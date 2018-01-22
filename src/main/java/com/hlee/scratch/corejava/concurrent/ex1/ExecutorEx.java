@@ -1,4 +1,4 @@
-package com.hlee.scratch.concurrent.ex1;
+package com.hlee.scratch.corejava.concurrent.ex1;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

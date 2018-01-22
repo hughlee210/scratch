@@ -8,6 +8,8 @@ public class PowerOf2 {
 
 		int x = 65536;
 		System.out.println(x + " is power of 2? " + isPowerOfTwo(x));
+        x = 65537;
+        System.out.println(x + " is power of 2? " + isPowerOfTwo(x));
 
 	}
 	

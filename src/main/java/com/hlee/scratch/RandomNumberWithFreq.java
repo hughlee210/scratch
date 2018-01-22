@@ -11,7 +11,7 @@ public class RandomNumberWithFreq {
     public static void main(String[] args) {
 
         test_usingArrays();
-        //        test_usingClass();
+        test_usingClass();
     }
 
     static int getRandom(int start, int end) {
@@ -20,10 +20,10 @@ public class RandomNumberWithFreq {
     }
 
     static void test_usingArrays() {
+        int[] array = { 12, 25, 17, 48 };
+        int[] freq = { 1, 6, 2, 1 };
         Map<Integer, Integer> countMap = new HashMap<>();
         for (int i = 0; i < 100; i++) {
-            int[] array = { 12, 25, 17, 48 };
-            int[] freq = { 1, 6, 2, 1 };
             int randElem = getRandomInArray(array, freq);
             System.out.println(i + ".random element = " + randElem);
 
@@ -53,12 +53,19 @@ public class RandomNumberWithFreq {
             } else {
                 freqReached[index] = true;
                 // if freq is reached for all elements, return -1
-                for (Boolean reached : freqReached) {
-                    if (!reached) {
-                        return getRandomInArray(arr, freq);
-                    }
+                //                for (boolean reached : freqReached) {
+                //                    if (!reached) {
+                //                        return getRandomInArray(arr, freq);
+                //                    }
+                //                }
+
+                int count = 0;
+                for (int i = 0; i < freqReached.length; i++) {
+                    if (freqReached[i])
+                        count++;
                 }
-                return -1;
+                if (count == freqReached.length)
+                    return -1;
             }
         }
     }

@@ -15,22 +15,23 @@ public class QuickSelect {
     public static void main(String[] args) {
         int[] arr = { 14, 2, 6, 9, 3 };
         int k = 0;
-        int result = select(arr, 0, arr.length - 1, k);
+        int result = selectIter(arr, 0, arr.length - 1, k);
         System.out.println(k + "th smallest element in " + Arrays.toString(arr) + " = " + result);
 
         arr = new int[] { 200, 10, 8, 1, 40 };
         k = 4;
-        result = select(arr, 0, arr.length - 1, k);
+        result = selectIter(arr, 0, arr.length - 1, k);
         System.out.println(k + "th smallest element in " + Arrays.toString(arr) + " = " + result);
 
+        arr = new int[] { 200, 10, 8, 1, 40 };
         int kthLargestIndex = 0;
-        int kthSmallestIndex = arr.length - kthLargestIndex - 1;
-
+        int kthSmallestIndex = arr.length - 1 - kthLargestIndex;
         result = select(arr, 0, arr.length - 1, kthSmallestIndex);
         System.out.println(kthLargestIndex + "th largest element in " + Arrays.toString(arr) + " = " + result);
 
+        arr = new int[] { 200, 10, 8, 1, 40 };
         kthLargestIndex = 4;
-        kthSmallestIndex = arr.length - kthLargestIndex - 1;
+        kthSmallestIndex = arr.length - 1 - kthLargestIndex;
         result = select(arr, 0, arr.length - 1, kthSmallestIndex);
         System.out.println(kthLargestIndex + "th largest element in " + Arrays.toString(arr) + " = " + result);
 
@@ -43,12 +44,12 @@ public class QuickSelect {
      */
     static int select(int[] arr, int left, int right, int k) {
         if (k < 0 || k > arr.length - 1)
-            return Integer.MIN_VALUE;
+            throw new IllegalArgumentException(k + " is not a valid argument");
         if (left == right && k < 2)
             return arr[left];
 
         Random rand = new Random();
-        int pivotIndex = left + (rand.nextInt(right - left + 1));
+        int pivotIndex = left + rand.nextInt(right - left + 1);
         pivotIndex = partition(arr, left, right, pivotIndex);
 
         // the pivot is in its final sorted position
@@ -60,6 +61,42 @@ public class QuickSelect {
             return select(arr, pivotIndex + 1, right, k);
     }
 
+    static int selectEx(int[] arr, int l, int r, int k) {
+        if (k < 0 || k > arr.length - 1)
+            throw new IllegalArgumentException("k " + k + " is not a valid argument.");
+        if (l == r && k < 2)
+            return arr[l];
+
+        Random rand = new Random();
+        int pivotIndex = l + rand.nextInt(r - l + 1);
+        pivotIndex = partitionEx(arr, l, r, pivotIndex);
+
+        // this pivot is in its final sorted position
+        if (k == pivotIndex)
+            return arr[k];
+        else if (k < pivotIndex)
+            return selectEx(arr, l, pivotIndex - 1, k);
+        else
+            return selectEx(arr, pivotIndex + 1, r, k);
+    }
+
+    static int partitionEx(int[] arr, int l, int r, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        // move pivot to the end
+        swap(arr, pivotIndex, r);
+        // position to store element less than the pivot
+        int storeIndex = l;
+        for (int i = l; i < r; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        // pivot was moved to the right, now move pivot to its final sorted place
+        swap(arr, storeIndex, r);
+        return storeIndex; // return sorted pivot position
+    }
+
     /**
      * Partition method, in linear time, group a list (ranging from indices left to right) 
      * into two parts, those less than a pivot element, 
@@ -68,14 +105,14 @@ public class QuickSelect {
     private static int partition(int[] arr, int left, int right, int pivotIndex) {
         int pivotValue = arr[pivotIndex];
         swap(arr, pivotIndex, right); // move pivot to end
-        int storeIndex = left; // position to store element less than pivot value
+        int storeIndex = left; // initial store position to store element less than pivot value
         for (int i = left; i < right; i++) {
             if (arr[i] < pivotValue) {
-                swap(arr, i, storeIndex);
+                swap(arr, storeIndex, i);
                 storeIndex++;
             }
         }
-        swap(arr, right, storeIndex); // move pivot to its final sorted place
+        swap(arr, storeIndex, right); // pivot was moved to the right, now move pivot to its final sorted place
         return storeIndex; // return sorted pivot position
     }
 
@@ -92,21 +129,21 @@ public class QuickSelect {
         arr[y] = temp;
     }
 
-    // NOT working
-    static int select_ex(int[] arr, int left, int right, int k) {
+    // working! - iterative version by eliminating tail recursion
+    static int selectIter(int[] arr, int left, int right, int k) {
         if (arr == null || arr.length == 0)
             throw new RuntimeException("array is null or empty");
+        if (left == right && k < 2)
+            return arr[left];
+
         Random rand = new Random();
         int pivotIndex = 0;
         while (true) {
-            if (left == right)
-                return arr[left];
-
             pivotIndex = left + rand.nextInt(right - left + 1);
             pivotIndex = partition(arr, left, right, k);
             if (k == pivotIndex)
                 return arr[k];
-            else if (k < arr[pivotIndex])
+            else if (k < pivotIndex)
                 right = pivotIndex - 1;
             else
                 left = pivotIndex + 1;

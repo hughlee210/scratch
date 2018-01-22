@@ -1,4 +1,4 @@
-package com.hlee.scratch.examplePrintCountry;
+package com.hlee.scratch.corejava.printCountry;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

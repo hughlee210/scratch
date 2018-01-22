@@ -1,5 +1,8 @@
 package com.hlee.scratch;
 
+// heap definition:
+// https://www.cs.cmu.edu/~adamchik/15-121/lectures/Binary%20Heaps/heaps.html
+
 public class MinHeap {
 
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.corejava;
 
 import java.util.Collection;
 import java.util.Queue;

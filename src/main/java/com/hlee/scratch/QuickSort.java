@@ -5,14 +5,14 @@ import java.util.Random;
 
 public class QuickSort {
     public static void main(String[] args) {
-        int[] arr = { 9, 2, 4, 7, 3, 7, 10 };
+        int[] arr = { 9, 2, 4, 7, 3, 7, 1, -3, 10 };
         System.out.println("before sort: " + Arrays.toString(arr));
 
         quickSort2(arr, 0, arr.length - 1);
         System.out.println("after sort : " + Arrays.toString(arr));
     }
 
-    // partition the array into two parts; elements in first half are less than pivot value
+    // partition the array into two parts; elements in first half are less than pivot value,
     // elements in second half are greater than pivot value.
     private static int partition(int[] arr, int left, int right, int pivotIndex) {
         int pivotValue = arr[pivotIndex];
@@ -20,11 +20,11 @@ public class QuickSort {
         int storeIndex = left; // position to store element less than pivot value
         for (int i = left; i < right; i++) {
             if (arr[i] < pivotValue) {
-                swap(arr, i, storeIndex);
+                swap(arr, storeIndex, i);
                 storeIndex++;
             }
         }
-        swap(arr, right, storeIndex); // move pivot to its final sorted place
+        swap(arr, storeIndex, right); // move pivot to its final sorted place
         return storeIndex; // return sorted pivot position
     }
 
@@ -41,13 +41,13 @@ public class QuickSort {
         arr[y] = temp;
     }
 
-    static void quickSort2(int[] arr, int low, int high) {
-        if (low < high) {
+    static void quickSort2(int[] arr, int l, int r) {
+        if (l < r) {
             Random rand = new Random();
-            int pivotIndex = low + rand.nextInt(high - low + 1);
-            pivotIndex = partition(arr, low, high, pivotIndex);
-            quickSort2(arr, low, pivotIndex - 1);
-            quickSort2(arr, pivotIndex + 1, high);
+            int pivotIndex = l + rand.nextInt(r - l + 1);
+            pivotIndex = partition(arr, l, r, pivotIndex);
+            quickSort2(arr, l, pivotIndex - 1);
+            quickSort2(arr, pivotIndex + 1, r);
         }
     }
 

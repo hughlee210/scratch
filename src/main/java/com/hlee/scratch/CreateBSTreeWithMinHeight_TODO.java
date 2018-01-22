@@ -12,14 +12,15 @@ public class CreateBSTreeWithMinHeight_TODO {
 	}
 
 	// Time: O(n)
-	public static TreeNode createMinHeightBST(int[] arr, int start, int end) {
+	public static TreeNode createMinHeightBST(int[] arr, int l, int r) {
+        // assume the arr is sorted in ascending order
 		System.out.println("method called");
-		if (end < start)
+        if (l > r)
 			return null;
-		int mid = (start + end) / 2;
+        int mid = l + (r - l) / 2; // (l + r) / 2;
 		TreeNode node = new TreeNode(arr[mid]);
-		node.left = createMinHeightBST(arr, start, mid - 1);
-		node.right = createMinHeightBST(arr, mid + 1, end);
+		node.left = createMinHeightBST(arr, l, mid - 1);
+		node.right = createMinHeightBST(arr, mid + 1, r);
 		return node;		
 	}	
 	
