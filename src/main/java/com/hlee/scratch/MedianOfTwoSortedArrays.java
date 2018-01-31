@@ -116,7 +116,6 @@ public class MedianOfTwoSortedArrays {
         // partitionY is the number of elements in partition Y
 
         while (low <= high) {
-            // 
             int partitionX = (low + high) / 2;
             int partitionY = (x + y + 1) / 2 - partitionX;
 
@@ -143,7 +142,6 @@ public class MedianOfTwoSortedArrays {
                 low = partitionX + 1;
             }
         }
-
         //Only we we can come here is if input arrays were not sorted. Throw in that scenario.
         throw new IllegalArgumentException();
     }
