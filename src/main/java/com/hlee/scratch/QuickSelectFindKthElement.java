@@ -10,7 +10,7 @@ import java.util.Random;
  * – the side with the element it is searching for. 
  * This reduces the average complexity from O(n log n) to O(n), with a worst case of O(n2).
  */
-public class QuickSelect {
+public class QuickSelectFindKthElement {
 
     public static void main(String[] args) {
         int[] arr = { 14, 2, 6, 9, 3 };

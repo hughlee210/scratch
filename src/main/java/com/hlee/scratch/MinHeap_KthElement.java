@@ -1,9 +1,11 @@
 package com.hlee.scratch;
 
+import java.util.Arrays;
+
 // heap definition:
 // https://www.cs.cmu.edu/~adamchik/15-121/lectures/Binary%20Heaps/heaps.html
 
-public class MinHeap {
+public class MinHeap_KthElement {
 
 	public static void main(String[] args) {
 
@@ -18,7 +20,6 @@ public class MinHeap {
 			int result = getKthSmallest(arr, k);
 			System.out.println(k + "th smallest element is " + result);
 		}
-
 	}
 
 	/**
@@ -30,54 +31,64 @@ public class MinHeap {
 			throw new RuntimeException(k + " is not valid for k");
 		}
 
-		// build a heap of n elements: O(n) time
-		MinHeap minHeap = new MinHeap(arr);
+        // build a heap of n elements: O(N) time
+		MinHeap_KthElement minHeap = new MinHeap_KthElement(arr);
 
-		// Extract min (k-1) times: O( (k-1) logn)
+        // Extract min (k-1) times: O((k-1)logN)
 		for (int i = 0; i < k - 1; i++) {
 			minHeap.extractMin();
 		}
 
-		// now getMin returns kth smallest element
+        // now getMin returns kth smallest element in constant time
 		return minHeap.getMin();
 	}
 
+    // heap properties
+    //
 	private int[] heapArr;
 	private int size;
 
-	public MinHeap(int[] arr) {
+    // Create a Min Heap from an array
+    // Time complexity: O(N)
+    //
+	public MinHeap_KthElement(int[] arr) {
 		this.size = arr.length;
-		heapArr = arr;
+        this.heapArr = arr;
 
 		int i = (size - 1) / 2;
 		while (i >= 0) {
 			heapify(i);
 			i--;
 		}
+        System.out.println("Min Heap created from an array " + Arrays.toString(arr));
 	}
 
-	private int getParent(int i) {
+	private int getParentIndex(int i) {
 		return (i - 1) / 2;
 	}
 
-	private int getLeft(int i) {
+	private int getLeftIndex(int i) {
 		return 2 * i + 1;
 	}
 
-	private int getRight(int i) {
+	private int getRightIndex(int i) {
 		return 2 * i + 2;
 	}
 
+    // Time complexity: O(1)
+    //
 	private int getMin() {
 		return heapArr[0];
 	}
 
+    // Time complexity: O(logN)
+    //
 	private int extractMin() {
 		if (size == 0)
 			return Integer.MAX_VALUE;
 
 		// store min value
-		int root = heapArr[0];
+		int rootValue = heapArr[0];
 
 		// if there are more than one item, move the last item to root
 		// and call heapify.
@@ -86,7 +97,7 @@ public class MinHeap {
 			heapify(0);
 		}
 		size--;
-		return root;
+		return rootValue;
 	}
 
 	private void swap(int[] arr, int m, int n) {
@@ -97,13 +108,11 @@ public class MinHeap {
 
 	/**
 	 * Heapify subtree rooted with index i
-	 * 
-	 * @param i
 	 */
 	private void heapify(int i) {
 		System.out.println("heapify called");
-		int l = getLeft(i);
-		int r = getRight(i);
+		int l = getLeftIndex(i);
+		int r = getRightIndex(i);
 		int smallest = i;
 		if (l < size && heapArr[l] < heapArr[i])
 			smallest = l;

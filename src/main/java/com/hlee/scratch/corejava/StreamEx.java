@@ -10,6 +10,7 @@ public class StreamEx {
 
         String[] arr = { " string1 ", "    string2     ", " string3" };
         List<String> list = Arrays.asList(arr).stream().map(s -> s.trim()).collect(Collectors.toList());
+
         System.out.println(Arrays.asList(arr));
         System.out.println(list);
 

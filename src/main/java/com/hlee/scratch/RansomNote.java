@@ -12,7 +12,7 @@ public class RansomNote {
     }
 
     // case sensitive: g is different from G 
-    // Time complexity: O(N), Space: O(N)
+    // Time complexity: O(N+M), Space: O(1), O(N)
     static boolean isRansomNotePossible(String ransomNote, String article) {
 
         if (ransomNote == null || ransomNote.length() == 0 || article == null || article.length() == 0) {

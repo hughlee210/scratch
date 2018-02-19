@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 public class Interval {
 
@@ -32,18 +30,13 @@ public class Interval {
         if (this == that)
             return true;
 
-        return new EqualsBuilder()
-                .append(this.start, that.start)
-                .append(this.end, that.end)
-                .isEquals();
+        return Objects.equals(start, that.start) && 
+               Objects.equals(end, that.end);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(this.start)
-                .append(this.end)
-                .hashCode();
+        return Objects.hash(start, end);
     }
 
     public static void main(String[] args) {

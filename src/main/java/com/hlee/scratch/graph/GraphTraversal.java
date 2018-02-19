@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.graph;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-public class Graph {
+public class GraphTraversal {
 
     public static void main(String[] args) {
 
@@ -24,7 +24,7 @@ public class Graph {
     }
 
     static List<Node> createTestNodes() {
-        Node node = new Node(1);
+        Node node1 = new Node(1);
         Node node2 = new Node(2);
         Node node3 = new Node(3);
         Node node4 = new Node(4);
@@ -34,8 +34,8 @@ public class Graph {
         Node node8 = new Node(8);
         Node node9 = new Node(9);
         Node node10 = new Node(10);
-        node.adjacentNodes.add(node2);
-        node.adjacentNodes.add(node3);
+        node1.adjacentNodes.add(node2);
+        node1.adjacentNodes.add(node3);
         node2.adjacentNodes.add(node4);
         node2.adjacentNodes.add(node5);
         node2.adjacentNodes.add(node6);
@@ -44,7 +44,7 @@ public class Graph {
         node7.adjacentNodes.add(node9);
         node8.adjacentNodes.add(node10);
         List<Node> list = new ArrayList<>();
-        list.add(node);
+        list.add(node1);
         list.add(node2);
         list.add(node3);
         list.add(node4);
@@ -76,6 +76,15 @@ public class Graph {
         }
     }
 
+    /**
+     *             1
+     *           /    \
+     *         2        3
+     *       / | \     / \
+     *      4  5  6   7   8
+     *               /     \
+     *              9       10  
+     */
     static void dfs(Node node) {
         count++;
         if (node == null)
@@ -89,6 +98,7 @@ public class Graph {
         System.out.println();
     }
 
+    // DFS using stack; similar to pre-order
     static void dfsIterative(Node node) {
         Stack<Node> stack = new Stack<>();
         stack.push(node);
@@ -96,6 +106,7 @@ public class Graph {
             Node n = stack.pop();
             if (!n.visited) {
                 visit(n);
+                // to visit adjacent nodes from left to right
                 for (int i = n.adjacentNodes.size() - 1; i >= 0; i--) {
                     stack.push(n.adjacentNodes.get(i));
                 }
@@ -104,16 +115,26 @@ public class Graph {
         System.out.println();
     }
 
+    /**
+     *             1
+     *           /    \
+     *         2        3
+     *       / | \     / \
+     *      4  5  6   7   8
+     *               /     \
+     *              9       10  
+     */
+    // BFS using queue; level order search
     static void bfs(Node node) {
-        Queue<Node> q = new LinkedList<>();
+        Queue<Node> queue = new LinkedList<>();
         visit(node);
-        q.add(node); // add to the end of queue
-        while (!q.isEmpty()) {
-            Node root = q.poll();
+        queue.add(node); // add to the end of queue
+        while (!queue.isEmpty()) {
+            Node root = queue.poll();
             for (Node n : root.adjacentNodes) {
                 if (!n.visited) {
                     visit(n);
-                    q.add(n);
+                    queue.add(n); // add n to the queue to process its adjacent nodes (next level nodes) later
                 }
             }
         }

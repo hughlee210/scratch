@@ -12,7 +12,7 @@ public class BinaryTree<T> {
         // .2...6
         // 1 3 5 7
 
-        BinaryTree<Integer> bt = new BinaryTree<Integer>();
+        BinaryTree<Integer> bst = new BinaryTree<Integer>();
         Node<Integer> node = new Node<Integer>(4);
         node.left = new Node<Integer>(2);
         node.right = new Node<Integer>(6);
@@ -20,29 +20,38 @@ public class BinaryTree<T> {
         node.left.right = new Node<Integer>(3);
         node.right.left = new Node<Integer>(5);
         node.right.right = new Node<Integer>(7);
-        bt.root = node;
+        bst.root = node;
 
         System.out.print("<printInorderRecursive>: ");
-        printInorderRecursive(bt.root);
+        printInorderRecursive(bst.root);
         System.out.println("  count = " + count);
         count = 0;
 
-        System.out.println("Is this tree a BST? " + bt.isBst());
+        System.out.println("Is this tree a BST? " + bst.isBst());
 
         List<Integer> list = new ArrayList<>();
-        bt.inOrderRecur(bt.root, list);
+        bst.inOrderRecur(bst.root, list);
         System.out.println("list converted from BST = " + list);
 
         System.out.print("\n<visitInOrder>: ");
-        bt.visitInOrder(true);
+        bst.visitInOrder(true);
 
         int targetSum = 8;
         System.out.println("\n<findSumPair_usingArray>: ");
-        bt.findSumPair_usingArray(targetSum);
+        bst.findSumPair_usingArray(targetSum);
 
         System.out.println("<findSumPair_usingStack>: ");
-        bt.findSumPair_usingStack(targetSum);
+        bst.findSumPair_usingStack(targetSum);
+        ///////////////////////////////////////////////////////////
 
+        int[] inOrderArr = new int[] { 4, 2, 5, 1, 6, 3 };
+        int[] preOrderArr = new int[] { 1, 2, 4, 5, 3, 6 };
+
+        Node root = buildTree(inOrderArr, preOrderArr, 0, inOrderArr.length - 1);
+
+        // building the tree by printing inorder traversal
+        System.out.println("Inorder traversal of constructed tree is : ");
+        printInorderRecursive(root);
     }
 
     static class Node<T> {
@@ -84,6 +93,87 @@ public class BinaryTree<T> {
         return isBst(node.left, min, node.value - 1) && isBst(node.right, node.value + 1, max);
     }
 
+    static int preIndex = 0;
+
+    // int[] inOrderArr  = new int[] { 4, 2, 5, 1, 6, 3 };
+    // int[] preOrderArr = new int[] { 1, 2, 4, 5, 3, 6 };
+    //
+    // Construct Tree from given Inorder and Preorder traversals
+    //
+    //    In a Preorder sequence, leftmost element is the root of the tree. So we know ‘A’ is root for given sequences. 
+    // By searching ‘A’ in Inorder sequence, we can find out all elements on left side of ‘A’ are in left subtree 
+    // and elements on right are in right subtree. So we know below structure now.
+    //
+    //          1
+    //        /   \
+    //      /       \
+    //    4 2 5     6 3
+    //
+    //  We recursively follow above steps and get the following tree.
+    //
+    //            1
+    //          /   \
+    //        /       \
+    //       2         3
+    //      / \       /
+    //     /    \    /
+    //    4      5  6
+    //
+    //  Algorithm: buildTree()
+    //  1) Pick an element from Preorder. Increment a Preorder Index Variable (preIndex in below code) to pick next element in next recursive call.
+    //  2) Create a new tree node tNode with the data as picked element.
+    //  3) Find the picked element’s index in Inorder. Let the index be inIndex.
+    //  4) Call buildTree for elements before inIndex and make the built tree as left subtree of tNode.
+    //  5) Call buildTree for elements after inIndex and make the built tree as right subtree of tNode.
+    //  6) return tNode.
+    //
+    // Time Complexity: O(n^2). Worst case occurs when tree is left skewed. 
+    // Example Preorder and Inorder traversals for worst case are {A, B, C, D} and {D, C, B, A}.
+    //
+    // O(NlogN) if the tree is balanced
+    // O(N^2) if the tree a linked list
+    // 
+    // https://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
+    // https://stackoverflow.com/questions/20922969/time-complexity-of-construction-of-a-binary-tree-from-inorder-and-preorder-trave
+    //
+    static Node buildTree(int[] inorderArr, int[] preorderArr, int inStart, int inEnd) {
+        if (inStart > inEnd)
+            return null;
+
+        // Pick value from preorder traversal array using preIndex,
+        // create a parent node with the value, and increment preIndex.
+        Node<Integer> node = new Node<>(preorderArr[preIndex++]);
+
+        // if this node has no children then return the node
+        if (inStart == inEnd)
+            return node;
+
+        // Else find the index of this value in inorder traversal array
+        int inIndex = search(inorderArr, node.value, inStart, inEnd);
+
+        // inIndex is the index of parent index that divides the inorder array 
+        // into left and right sub trees
+        // using index in inorder traversal, construct left and right sub trees
+        //
+        node.left = buildTree(inorderArr, preorderArr, inStart, inIndex - 1);
+        node.right = buildTree(inorderArr, preorderArr, inIndex + 1, inEnd);
+
+        return node;
+    }
+
+    /*
+     * Function to find index of value in arr[start...end]
+     * The function assumes that value is present in the array
+     */
+    static int search(int[] arr, int value, int start, int end) {
+        for (int i = start; i <= end; i++) {
+            if (arr[i] == value) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     /**
      * time: O(N), space: O(height of tree)
      * The space complexity of this traversal seems to be O(h) where h is height of tree. 
@@ -101,44 +191,35 @@ public class BinaryTree<T> {
         printInorderRecursive(node.right);
     }
 
+    public static void printPreOrderRecursive(Node node) {
+        if (node == null)
+            return;
+        System.out.print(node.value + " ");
+        printPreOrderRecursive(node.left);
+        printPreOrderRecursive(node.right);
+    }
+
     // ...4
     // .2...6
     // 1 3 5 7
     /**
-     * time: O(N), space: O(height of tree) = O(logN) if BST 
+     * Using stack. similar to DFS.
+     * time: O(N), space: O(height of tree) = O(logN) if BST
      */
     public List<T> visitInOrder(boolean print) {
-        List<T> list = new ArrayList<T>();
-        Node<T> node = root;
-        Stack<Node<T>> parentStack = new Stack<BinaryTree.Node<T>>();
-        while (!parentStack.isEmpty() || node != null) {
-            if (node != null) {
-                parentStack.push(node);
-                node = node.left;
-            } else {
-                node = parentStack.pop();
-                if (print)
-                    System.out.print(node.value + " ");
-                list.add(node.value);
-                node = node.right;
-            }
-        }
-        return list;
-    }
-
-    public List<T> visitInOrder_ex(boolean print) {
-        // exercise
-        List<T> list = new ArrayList<>();
+        List<T> list = new ArrayList<T>(); // store value in visited order
         Node<T> node = root;
         Stack<Node<T>> parentStack = new Stack<>();
         while (!parentStack.isEmpty() || node != null) {
             if (node != null) {
+                // push the node to visit later after visiting its left child
                 parentStack.push(node);
                 node = node.left;
-            } else {
+            } else { // means no more child
                 node = parentStack.pop();
                 if (print)
                     System.out.print(node.value + " ");
+                // after visiting the node move to right child
                 list.add(node.value);
                 node = node.right;
             }
@@ -152,15 +233,6 @@ public class BinaryTree<T> {
         inOrderRecur(node.left, list);
         list.add(node.value);
         inOrderRecur(node.right, list);
-    }
-
-    void inOrderRecur_ex(Node<T> node, List<T> list) {
-        // exercise
-        if (node == null)
-            return;
-        inOrderRecur_ex(node.left, list);
-        list.add(node.value);
-        inOrderRecur_ex(node.right, list);
     }
 
     List<T> inOrderIter(Node<T> root) {
@@ -269,7 +341,7 @@ public class BinaryTree<T> {
         Node<Integer> node1 = (Node<Integer>) root;
         Node<Integer> node2 = (Node<Integer>) root;
         while (true) {
-            // find next node in normal in-order traversal
+            // find next node in normal in-order traversal (starting from leftmost node)
             // time: O(N/2), space: O(logN/2)
             while (!stop1) {
                 if (node1 != null) {
@@ -285,7 +357,7 @@ public class BinaryTree<T> {
                 }
             }
 
-            // find next node in Reverse in-order traversal
+            // find next node in Reverse in-order traversal (starting from rightmost node)
             // time: O(N/2), space: O(logN/2)
             while (!stop2) {
                 if (node2 != null) {
@@ -364,5 +436,6 @@ public class BinaryTree<T> {
                 stop2 = false;
         }
     }
+
 
 }
