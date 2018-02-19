@@ -57,6 +57,7 @@ public class MaxQueue<T extends Number> {
     int size;
     Integer currentMax = Integer.MIN_VALUE;
 
+    // Time complexity: O(1)
     public void add(Integer value) {
 
         if (value > currentMax) {
@@ -69,6 +70,7 @@ public class MaxQueue<T extends Number> {
         size++;
     }
 
+    // Time complexity: O(1) amortized constant time
     public Integer remove() {
         if (out.isEmpty()) {
             if (in.isEmpty()) {
@@ -101,13 +103,18 @@ public class MaxQueue<T extends Number> {
         }
     }
 
+    // Time complexity: O(1)
     public Integer getMaxValue() {
-        if (!out.isEmpty()) {
-            Node node = out.peek();
-            return node != null ? node.maxUptoCurrentNode : null;
-        } else {
+        if (out.isEmpty()) {
             Node node = in.peek();
             return node != null ? node.maxUptoCurrentNode : null;
+        } else {
+            Node outStackTop = out.peek();
+            if (!in.isEmpty()) {
+                Node inStackTop = in.peek();
+                return Math.max(outStackTop.maxUptoCurrentNode, inStackTop.maxUptoCurrentNode);
+            }
+            return outStackTop.maxUptoCurrentNode;
         }
     }
 
@@ -151,11 +158,14 @@ public class MaxQueue<T extends Number> {
 
         assertEquals(10, queue.getMaxValue().intValue());
 
-        queue.remove();
+        queue.remove(); // remove node with value 2
         assertEquals(10, queue.getMaxValue().intValue());
 
-        queue.remove();
+        queue.remove(); // remove node with value 10
         assertEquals(7, queue.getMaxValue().intValue());
+
+        queue.add(20);
+        assertEquals(20, queue.getMaxValue().intValue());
 
     }
 
