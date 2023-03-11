@@ -6,54 +6,86 @@ import java.util.Map;
 public class LongestSubstringWithNoDupChars {
 
     public static void main(String[] args) {
-        String str = "zabcdefabcdab";
-        int[] result = lengthOfLongestSubstring(str);
-        System.out.println("length of longest substring of " + str + ": " + result[0] + " starting index " + result[1] + 
-                " = " + str.substring(result[1], result[1] + result[0]));
+        //String str = "zabcdefabcdab";
+        //String str = "abccabb";
+        String str = "aa";
+        int length = lengthOfLongestSubstring_bruteForce(str);
+        System.out.println("Brute force: length of longest substring of " + str + ": " + length);
 
-        int length = lengthOfLongestSubstring_usingIntArrFlag(str);
-        System.out.println("length of longest substring of " + str + ": " + length);
+        length = lengthOfLongestSubstring_optimal(str);
+        System.out.println("Optimal (using hash map): length of longest substring of " + str + ": " + length);
+
+        length = lengthOfLongestSubstring_usingIntArrayFlag(str);
+        System.out.println("Optimal (using int flag array): length of longest substring of " + str + ": " + length);
     }
 
-    public static int[] lengthOfLongestSubstring(String str) {
-        int maxLen = 0, start = 0, curr = 0, maxStart = 0;
-        Map<Character, Integer> charPosMap = new HashMap<>();
-        while (curr < str.length()) {
-            char ch = str.charAt(curr);
-            if (charPosMap.containsKey(ch) && charPosMap.get(ch) >= start) {
-                if ((curr - start) > maxLen)
-                    maxStart = start;
-                // we hit a recurrence, so update max length and start position
-                maxLen = Math.max(maxLen, curr - start);
-                start = charPosMap.get(ch) + 1;
-            }
-            // update the position of the current character
-            charPosMap.put(ch, curr);
-            curr++;
+    // brute force solution
+    // Time: O(N^2)
+    // Space: O(N)
+    // abccdefgjjk
+    // L pointer
+    // R pointer
+    public static int lengthOfLongestSubstring_bruteForce(String s) {
+        if (s.length() <= 1) {
+            return s.length();
         }
-        if ((curr - start) > maxLen)
-            maxStart = start;
-        maxLen = Math.max(maxLen, curr - start);
-        int[] result = { maxLen, maxStart };
-        return result;
+        int longestLength = 0;
+        for (int left = 0; left < s.length(); left++) {
+            Map<Character, Integer> seenCharIndexMap = new HashMap<>();
+            int currentLength = 0;
+            for (int right = left; right < s.length(); right++) {
+                char currentChar = s.charAt(right);
+                Integer seenCharIndex = seenCharIndexMap.get(currentChar);
+                if (seenCharIndex == null) {
+                    currentLength++;
+                    seenCharIndexMap.put(currentChar, right);
+                    longestLength = Math.max(longestLength, currentLength);
+                } else {
+                    break;
+                }
+            }
+        }
+        return longestLength;
     }
 
-    // this is wrong
-    public static int lengthOfLongestSubstring_usingIntArrFlag(String str) {
-        int maxLen = 0;
-        int start = 0, end = 0;
-        int[] flags = new int[256]; // assume input str is ascii characters
-        while (end < str.length()) {
-            char ch = str.charAt(end);
-            if (flags[ch] > 0 && flags[ch] >= start) {
-                maxLen = Math.max(maxLen, end - start);
-                start = flags[ch] + 1;
-            }
-            flags[ch] = end;
-            end++;
+    // using two pointer technique (sliding window)
+    // Time: O(N)
+    // Space: O(N)
+    public static int lengthOfLongestSubstring_optimal(String s) {
+        if (s.length() <= 1) {
+            return s.length();
         }
-        maxLen = Math.max(maxLen, end - start);
-        return maxLen;
+        Map<Character, Integer> seenCharIndexMap = new HashMap<>();
+        int left = 0, longestLength = 0;
+        for (int right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+            Integer seenCharIndex = seenCharIndexMap.get(currentChar);
+            if (seenCharIndex != null && seenCharIndex >= left) {
+                left = seenCharIndex + 1;
+            }
+            seenCharIndexMap.put(currentChar, right);
+            longestLength = Math.max(longestLength, right - left + 1);
+        }
+        return longestLength;
+    }
+
+    public static int lengthOfLongestSubstring_usingIntArrayFlag(String s) {
+        int longestLength = 0;
+        int left = 0;
+        int[] flags = new int[256]; // assume int str is ascii characters
+        for (int i = 0; i < flags.length; i++) {
+            flags[i] = -1;
+        }
+
+        for (int right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+            if (flags[currentChar] > -1 && flags[currentChar] >= left) {
+                left = flags[currentChar] + 1;
+            }
+            flags[currentChar] = right;
+            longestLength = Math.max(longestLength, right - left + 1);
+        }
+        return longestLength;
     }
 
 }

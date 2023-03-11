@@ -8,24 +8,38 @@ public class QuickSort {
         int[] arr = { 9, 2, 4, 7, 3, 7, 1, -3, 10 };
         System.out.println("before sort: " + Arrays.toString(arr));
 
-        quickSort2(arr, 0, arr.length - 1);
+        quickSort(arr, 0, arr.length - 1);
         System.out.println("after sort : " + Arrays.toString(arr));
+
+        int k = 2;
+        int kthLargestElement = getKthLargest(arr, k);
+        System.out.println(String.format("%d(th) largest element in array %s = %d (using quick sort)",
+                k, Arrays.toString(arr), kthLargestElement));
+
+        kthLargestElement = getKthLargestUsingQuickSelect(arr, k);
+        System.out.println(String.format("%d(th) largest element in array %s = %d (using quick select)",
+                k, Arrays.toString(arr), kthLargestElement));
     }
 
-    // partition the array into two parts; elements in first half are less than pivot value,
-    // elements in second half are greater than pivot value.
-    private static int partition(int[] arr, int left, int right, int pivotIndex) {
-        int pivotValue = arr[pivotIndex];
-        swap(arr, pivotIndex, right); // move pivot to end
-        int storeIndex = left; // position to store element less than pivot value
-        for (int i = left; i < right; i++) {
-            if (arr[i] < pivotValue) {
-                swap(arr, storeIndex, i);
-                storeIndex++;
+    /**
+     * Partition method, in linear time, group a list (ranging from indices left to right)
+     * into two parts, those less than a pivot element,
+     * and those greater than or equal to the element.
+     * [5,3,4,2,6,1]
+     *  i         pivot
+     *  j
+     */
+    private static int partition(int[] arr, int left, int right) {
+        int pivotValue = arr[right];
+        int partitionIndex = left; // initialize to left. position to store element less than pivot value
+        for (int j = left; j < right; j++) {
+            if (arr[j] < pivotValue) {
+                swap(arr, partitionIndex, j);
+                partitionIndex++;
             }
         }
-        swap(arr, storeIndex, right); // move pivot to its final sorted place
-        return storeIndex; // return sorted pivot position
+        swap(arr, partitionIndex, right); // move pivot element to its final sorted place
+        return partitionIndex; // return sorted pivot position
     }
 
     private static void swap(int[] arr, int x, int y) {
@@ -41,17 +55,64 @@ public class QuickSort {
         arr[y] = temp;
     }
 
-    static void quickSort2(int[] arr, int l, int r) {
-        if (l < r) {
-            Random rand = new Random();
-            int pivotIndex = l + rand.nextInt(r - l + 1);
-            pivotIndex = partition(arr, l, r, pivotIndex);
-            quickSort2(arr, l, pivotIndex - 1);
-            quickSort2(arr, pivotIndex + 1, r);
+    // Time: O(NlogN); partition time (N) * number of partition call (logN)
+    // Space: O(logN); how many times it's called (stack space)
+    static void quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int partitionIndex = partition(arr, left, right); // Time: O(N)
+            quickSort(arr, left, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, right);
         }
     }
 
-    public static void quickSort(int[] arr, int low, int high) {
+    /**
+     * Returns the element of the array at indexToFind position within left..right inclusive.
+     * The search space within the array is changing for each round - but the list
+     * is still the same size. Thus, indexToFind does not need to be updated with each round.
+     *
+     * Time: O(N + N/2 + N/4 + N/8 + ...) = O(2N) = O(N)
+     * Space: O(1) if compiler supports tail recursion
+     */
+    static int quickSelect(int[] arr, int left, int right, int indexToFind) {
+        if (left < right) {
+            int partitionIndex = partition(arr, left, right);
+            if (partitionIndex == indexToFind) {
+                return arr[partitionIndex];
+            } else if (indexToFind < partitionIndex) {
+                return quickSelect(arr, left, partitionIndex - 1, indexToFind);
+            } else {
+                return quickSelect(arr, partitionIndex + 1, right, indexToFind);
+            }
+        }
+        throw new IllegalArgumentException("left and right arguments are not a valid");
+    }
+
+    int quickSelect_iter(int[] arr, int left, int right, int indexToFind) {
+        while (true) {
+            int partitionIndex = partition(arr, left, right);
+            if (indexToFind == partitionIndex) {
+                return arr[indexToFind];
+            } else if (indexToFind < partitionIndex) {
+                right = partitionIndex - 1;
+            } else {
+                left = partitionIndex + 1;
+            }
+        }
+    }
+
+    static int getKthLargest(int[] arr, int k) {
+        // using quick sort
+        int indexToFind = arr.length - k;
+        quickSort(arr, 0, arr.length - 1);
+        return arr[indexToFind];
+    }
+
+    static int getKthLargestUsingQuickSelect(int[] arr, int k) {
+        int indexToFind = arr.length - k;
+        return quickSelect(arr, 0, arr.length - 1, indexToFind);
+    }
+
+    public static void quickSort_iter(int[] arr, int low, int high) {
         if (arr == null || arr.length == 0)
             return;
 
@@ -91,12 +152,13 @@ public class QuickSort {
         // recursively sort two sub parts
         if (low < right) {
             //            System.out.println("  doing quickSort(arr, " + low + ", " + right + ")");
-            quickSort(arr, low, right);
+            quickSort_iter(arr, low, right);
         }
 
         if (high > left) {
             //            System.out.println("  doing quickSort(arr, " + left + ", " + high + ")");
-            quickSort(arr, left, high);
+            quickSort_iter(arr, left, high);
         }
     }
+
 }

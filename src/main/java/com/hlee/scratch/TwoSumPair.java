@@ -35,11 +35,26 @@ public class TwoSumPair {
         if (arr == null || arr.length == 0)
             return;
         for (int i = 0; i < arr.length; i++) {
+            int numToFind = sum - arr[i];
             for (int j = i + 1; j < arr.length; j++) {
-                if (arr[i] + arr[j] == sum)
+                if (numToFind == arr[j])
                     System.out.println("found two num for sum: " + arr[i] + " + " + arr[j] + " = " + sum);
             }
         }
+    }
+
+    static int[] findSumPair_brute(int[] nums, int sum) {
+        if (nums == null || nums.length == 0)
+            return null;
+        for (int p1 = 0; p1 < nums.length; p1++) {
+            int numberToFind = sum - nums[p1];
+            for (int p2 = p1 + 1; p2 < nums.length; p2++) {
+                if (numberToFind == nums[p2]) {
+                    return new int[]{p1, p2};
+                }
+            }
+        }
+        return null;
     }
 
     static void findSumTriplet_bruteForce(int[] arr, int sum) {
@@ -105,10 +120,27 @@ public class TwoSumPair {
             return;
         Map<Integer, Integer> numMap = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
-            if (numMap.containsKey(sum - arr[i]))
+            int numberToFind = sum - arr[i];
+            if (numMap.containsKey(numberToFind))
                 System.out.println("found a pair for sum: " + sum + " = " + (sum - arr[i]) + "(at index " + numMap.get(sum - arr[i]) + ") + " + arr[i] + "(at index " + i + ")");
             else
                 numMap.put(arr[i], i);
         }
+    }
+
+    static int[] findSumPair_optimal(int[] nums, int sum) {
+        if (nums == null || nums.length == 0)
+            return null;
+        Map<Integer, Integer> numsMap = new HashMap<>();
+        for (int p = 0; p < nums.length; p++) {
+            Integer currentMapVal = numsMap.get(nums[p]);
+            if (currentMapVal != null) {
+                return new int[]{currentMapVal, p};
+            } else {
+                int numberToFind = sum - nums[p];
+                numsMap.put(numberToFind, p);
+            }
+        }
+        return null;
     }
 }

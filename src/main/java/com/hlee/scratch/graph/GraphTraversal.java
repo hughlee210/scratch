@@ -13,16 +13,32 @@ public class GraphTraversal {
         List<Node> nodes = createTestNodes();
         Node node = nodes.get(0);
         dfs(node);
-        System.out.println("call count = " + count + ", loop count = " + loopCnt);
-        resetNodes(nodes);
+        System.out.println("dfs call count = " + count + ", loop count = " + loopCnt);
 
+        System.out.println("dfsIterative");
         dfsIterative(node);
-        resetNodes(nodes);
 
+        System.out.println("bfs");
         bfs(node);
-        resetNodes(nodes);
+
+        System.out.println("bfsRecur");
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(node);
+        List<Integer> list = new ArrayList<>();
+        bfsRecur(queue, list);
+        System.out.println("\nresult list: " + list);
     }
 
+    /**
+     *                 1
+     *              /     \
+     *             2       3
+     *           / | \    / \
+      *         4  5  6  7  8
+     *                  /   |
+     *                 9    10
+     * @return
+     */
     static List<Node> createTestNodes() {
         Node node1 = new Node(1);
         Node node2 = new Node(2);
@@ -57,17 +73,10 @@ public class GraphTraversal {
         return list;
     }
 
-    static void resetNodes(List<Node> nodes) {
-        for (Node node : nodes) {
-            node.visited = false;
-        }
-    }
-
     static int count = 0;
     static int loopCnt = 0;
 
     static class Node {
-        boolean visited;
         int value;
         List<Node> adjacentNodes = new ArrayList<>();
 
@@ -92,8 +101,7 @@ public class GraphTraversal {
         visit(node);
         for (Node n : node.adjacentNodes) {
             loopCnt++;
-            if (!n.visited)
-                dfs(n);
+            dfs(n);
         }
         System.out.println();
     }
@@ -104,12 +112,10 @@ public class GraphTraversal {
         stack.push(node);
         while (!stack.isEmpty()) {
             Node n = stack.pop();
-            if (!n.visited) {
-                visit(n);
-                // to visit adjacent nodes from left to right
-                for (int i = n.adjacentNodes.size() - 1; i >= 0; i--) {
-                    stack.push(n.adjacentNodes.get(i));
-                }
+            visit(n);
+            // to visit adjacent nodes from left to right
+            for (int i = n.adjacentNodes.size() - 1; i >= 0; i--) {
+                stack.push(n.adjacentNodes.get(i));
             }
         }
         System.out.println();
@@ -127,22 +133,30 @@ public class GraphTraversal {
     // BFS using queue; level order search
     static void bfs(Node node) {
         Queue<Node> queue = new LinkedList<>();
-        visit(node);
         queue.add(node); // add to the end of queue
         while (!queue.isEmpty()) {
-            Node root = queue.poll();
-            for (Node n : root.adjacentNodes) {
-                if (!n.visited) {
-                    visit(n);
-                    queue.add(n); // add n to the queue to process its adjacent nodes (next level nodes) later
-                }
+            Node currentNode = queue.poll();
+            visit(currentNode);
+            for (Node n : currentNode.adjacentNodes) {
+                queue.add(n); // add n to the queue to process its adjacent nodes (next level nodes) later
             }
         }
         System.out.println();
     }
 
+    static void bfsRecur(Queue<Node> queue, List<Integer> list) {
+        if (queue.isEmpty())
+            return;
+        Node currentNode = queue.poll();
+        list.add(currentNode.value);
+        visit(currentNode);
+        for (Node n : currentNode.adjacentNodes) {
+            queue.add(n);
+        }
+        bfsRecur(queue, list);
+    }
+
     private static void visit(Node root) {
         System.out.print(root.value + ", ");
-        root.visited = true;
     }
 }

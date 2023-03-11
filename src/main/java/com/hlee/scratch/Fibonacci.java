@@ -14,84 +14,55 @@ public class Fibonacci {
 //        System.out.println("==============================================");
 
         start = System.currentTimeMillis();
-        long val = fibo(10, 0);
-        System.out.println("result of fib with caching: " + val);
+        long val = fibo(20);
+        System.out.println("result of fib without caching: " + val);
         System.out.println("time taken: " + (System.currentTimeMillis() - start) + " millisec");
         System.out.println("==============================================");
 
         start = System.currentTimeMillis();
-        val = fiboIter(50, 0);
+        val = fibo_iter(50);
         System.out.println("result of fib using iteration: " + val);
         System.out.println("time taken: " + (System.currentTimeMillis() - start) + " millisec");
         System.out.println("==============================================");
 
         start = System.currentTimeMillis();
-        val = fibo_caching(50, 0);
+        val = fibo_caching(50);
         System.out.println("result of fib with caching: " + val);
         System.out.println("time taken: " + (System.currentTimeMillis() - start) + " millisec");
         System.out.println("==============================================");
     }
 
     // time: O(2^n) exponential
-    static long fibo(int n, int count) {
-        count++;
-        if (n == 0) {
-            System.out.println("exec count = " + count);
-            return 0;
-        } else if (n == 1) {
-            return 1;
+    static long fibo(int n) {
+        if (n < 2) {
+            return n;
         }
-        long result = fibo(n - 1, count) + fibo(n - 2, count);
-        return result;
+        return fibo(n - 1) + fibo(n - 2);
     }
 
     // time: O(n) linear, space: O(1)
     static long[] fib = new long[10000];
 
     // time: O(n) linear, space: O(n)
-    static long fibo_caching(int n, int count) {
-        count++;
-        if (n == 0) {
-            System.out.println("exec count = " + count);
-            return 0;
-        } else if (n == 1) {
-            return 1;
-        }
+    static long fibo_caching(int n) {
+        if (n < 2)
+            return n;
         if (fib[n] != 0)
             return fib[n]; // return cached result
-        fib[n] = fibo_caching(n - 1, count) + fibo_caching(n - 2, count);
+        fib[n] = fibo_caching(n - 1) + fibo_caching(n - 2);
         return fib[n];
     }
 
-    static long fiboIter(int n, int count) {
-        if (n == 0)
-            return 0;
-        else if (n == 1)
-            return 1;
-        long fibo1 = 0, fibo2 = 1, fibo = 1;
+    // time: O(N), space: O(1) optimized
+    static long fibo_iter(int n) {
+        if (n < 2)
+            return n;
+        long fibo0 = 0, fibo1 = 1, fibo = 1;
         for (int i = 2; i <= n; i++) {
-            fibo = fibo1 + fibo2; // fibonacci number is sum of previous two fibonacci numbers
-            fibo1 = fibo2;
-            fibo2 = fibo;
-            count++;
-        }
-        System.out.println("exec count = " + count);
-        return fibo;
-    }
-
-    static long fiboIter_ex(int n) {
-        if (n == 0)
-            return 0;
-        else if (n == 1)
-            return 1;
-        long fibo1 = 0, fibo2 = 1, fibo = 0;
-        for (int i = 2; i <= n; i++) {
-            // fibonacci number is sum of previous two fibonacci numbers
-            fibo = fibo1 + fibo2;
-            fibo1 = fibo2;
-            fibo2 = fibo;
+            fibo = fibo0 + fibo1; // fibonacci number is sum of previous two fibonacci numbers
+            fibo0 = fibo1;
+            fibo1 = fibo;
         }
         return fibo;
     }
-
 }

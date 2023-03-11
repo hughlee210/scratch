@@ -1,0 +1,27 @@
+1. TwoSumPair (array)
+2. MaxWaterContainer (array)
+3. Trapping Rainwater (array)
+4. Backspace compare (string, array)
+5. Longest substring without repeating characters (string)
+6. Palindrome and almost palindrome (1 char different) (string)
+7. Reverse a linked list. Determine if list has a loop (linked list)
+8. Merge multi-level doubly linked list (linked list)
+9. Cycle detection in linked list
+10. Matching Parentheses (stack)
+11. Implement Queue with Stacks (stack)
+12. Factorial (recursion, tail recursion)
+13. Quick sort, kth largest element (recursion)
+14. Quick select
+
+- 2D array
+
+- Dynamic Programming
+
+
+
+
+
+
+
+
+

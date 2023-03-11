@@ -72,10 +72,14 @@ public class Anagram {
      *  time: O(N), space: O(N)
      */
     public static boolean isAnagram_usingHashMap(String s1, String s2) {
+        if (s1 == null || s2 == null || s1.length() != s2.length())
+            return false;
+
         Map<Character, Integer> countsMap = new HashMap<>(); // space: O(N)
 
         // time: O(N)
-        for (char ch : s1.toCharArray()) {
+        for (int i = 0; i < s1.length(); i++) {
+            char ch = s1.charAt(i);
             if (countsMap.containsKey(ch)) {
                 countsMap.put(ch, countsMap.get(ch) + 1);
             } else {
@@ -83,12 +87,14 @@ public class Anagram {
             }
         }
         // time: O(N)
-        for (char ch : s2.toCharArray()) {
+        for (int i = 0; i < s2.length(); i++) {
+            char ch = s2.charAt(i);
             if (countsMap.containsKey(ch)) {
                 if (countsMap.get(ch) == 0) {
                     return false;
+                } else {
+                    countsMap.put(ch, countsMap.get(ch) - 1);
                 }
-                countsMap.put(ch, countsMap.get(ch) - 1);
             } else {
                 return false;
             }

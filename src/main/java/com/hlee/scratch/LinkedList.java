@@ -19,7 +19,7 @@ public class LinkedList<T> {
     private Node<T> head;
 
     public static void main(String[] args) {
-        LinkedList<Integer> list = new LinkedList<Integer>();
+        LinkedList<Integer> list = new LinkedList<>();
         list.print();
 
         list.add(1);
@@ -81,6 +81,24 @@ public class LinkedList<T> {
         node.next = newNode;
     }
 
+    public void addNode(T e) {
+        final Node<T> newNode = new Node<>(e);
+        if (head == null) {
+            head = newNode;
+            return;
+        }
+
+        Node<T> node = head;
+        while (node.next != null) {
+            node = node.next;
+        }
+        node.next = newNode;
+    }
+
+    /**
+     * add a node to the front of list
+     * @param e
+     */
     public void push(T e) {
         Node<T> newNode = new Node<>(e, null);
         newNode.next = head;
@@ -116,18 +134,17 @@ public class LinkedList<T> {
     }
 
     public void reverse_ex() {
-        // practice reverse method
         if (head == null || head.next == null)
             return;
-        Node<T> currNode = head;
-        Node<T> nextNode = head.next;
-        Node<T> tempNode = null;
+        Node currNode = head;
+        Node nextNode = head.next;
+        Node node3 = null;
         head.next = null;
         while (nextNode != null) {
-            tempNode = nextNode.next; // store next pointer of the next node before updating the pointer.
+            node3 = nextNode.next;
             nextNode.next = currNode;
             currNode = nextNode;
-            nextNode = tempNode;
+            nextNode = node3;
         }
         head = currNode;
     }
@@ -149,22 +166,22 @@ public class LinkedList<T> {
     }
 
     private void reverseRecur_ex(Node<T> node) {
-        // practice
         if (node == null)
             return;
-        if (node.next == null) {
+        if (node.next == null) { // reached the last node, so this node becomes the head
             head = node;
             return;
         }
         reverseRecur_ex(node.next);
-        node.next.next = node; // change the next pointer to previous node
-        node.next = null; // cut the existing pointer        
+
+        node.next.next = node; // // change the next pointer to previous node
+        node.next = null; // cut the existing pointer
     }
 
     private void reverseRecur(Node<T> node) {
         if (node == null)
             return;
-        if (node.next == null) { // reached the last node, so this node become the head
+        if (node.next == null) { // base case; reached the last node, so this node become the head
             head = node;
             return;
         }
@@ -239,8 +256,6 @@ public class LinkedList<T> {
     }
 
     private static boolean hasLoop(Node node) {
-        if (node == null)
-            return false;
         Node slow = node;
         Node fast = node;
         while (fast != null && fast.next != null) {
@@ -252,6 +267,26 @@ public class LinkedList<T> {
         return false; // fast reached null, so the list terminates
     }
 
+    Node findCycleStartNode(Node head) {
+        Node slow = head, fast = head;
+        while (fast != null && fast.next != null) { // can also use while (true)
+            slow = slow.next; // 1 hop
+            fast = fast.next.next; // 2 hop
+            if (slow == fast)
+                break;
+        }
+        if (fast == null || fast.next == null)
+            return null; // fast reached null, so the list terminates
+
+        Node p1 = head, p2 = slow;
+        while (p1 != p2) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return p1;
+    }
+
+    // find middle node of non-circular list
     private static Node findMiddleNode(Node head) {
         if (head == null)
             return null;

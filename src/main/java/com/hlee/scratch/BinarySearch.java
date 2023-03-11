@@ -46,17 +46,18 @@ public class BinarySearch {
     public static int bs(int[] arr, int key) {
         if (arr == null || arr.length == 0)
             return -1;
-        int lo = 0;
-        int hi = arr.length - 1;
-        while (lo < hi) {
-            // mid = (lo + hi) / 2; // this can cause integer overflow
-            int mid = lo + (hi - lo) / 2; // to avoid integer overflow
-            if (key == arr[mid])
-                return mid;
-            else if (key < arr[mid])
-                hi = mid - 1;
-            else if (key > arr[mid])
-                lo = mid + 1;
+        int left = 0;
+        int right = arr.length - 1;
+        while (left < right) {
+            //int mid = (left + right) / 2; // this can cause integer overflow
+            int midIndex = left + (right - left) / 2; // to avoid integer overflow
+            if (key == arr[midIndex]) {
+                return midIndex;
+            } else if (key < arr[midIndex]) {
+                right = midIndex - 1;
+            } else {
+                left = midIndex + 1;
+            }
         }
         return -1;
     }
@@ -64,17 +65,15 @@ public class BinarySearch {
     /**
      * time: O(logN), space: O(logN) call stack frames
      */
-    public static int rBS(int[] arr, int key, int lo, int hi) {
+    public static int rBS(int[] arr, int key, int left, int right) {
         if (arr == null || arr.length == 0)
             return -1;
-        if (lo < hi) {
-            int mid = lo + (hi - lo) / 2; // to avoid integer overflow
+        if (left < right) {
+            int mid = left + (right - left) / 2; // to avoid integer overflow
             if (key == arr[mid])
                 return mid;
             else if (key < arr[mid])
-                return rBS(arr, key, lo, mid - 1);
-            else if (key > arr[mid])
-                return rBS(arr, key, mid + 1, hi);
+                return rBS(arr, key, left, mid - 1);
         }
         return -1;
     }
@@ -89,26 +88,26 @@ public class BinarySearch {
     public static int indexOfElementInRotatedArray(int[] arr, int key) {
         if (arr == null || arr.length == 0)
             return -1;
-        int lo = 0;
-        int hi = arr.length - 1;
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
+        int left = 0;
+        int right = arr.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
             if (key == arr[mid]) {
                 return mid;
             }
             // now check two parts: first half < mid and second half >= mid element
-            if (arr[lo] < arr[mid]) {
+            if (arr[left] < arr[mid]) {
                 // left half is sorted, so check if key is in this half
-                if (arr[lo] <= key && key < arr[mid])
-                    hi = mid - 1;
+                if (arr[left] <= key && key < arr[mid])
+                    right = mid - 1;
                 else
-                    lo = mid;
+                    left = mid;
             } else {
                 // right half is sorted, so check if key is in this half
-                if (arr[mid] < key && key <= arr[hi])
-                    lo = mid + 1;
+                if (arr[mid] < key && key <= arr[right])
+                    left = mid + 1;
                 else
-                    hi = mid;
+                    right = mid;
             }
         }
         return -1;
@@ -124,19 +123,19 @@ public class BinarySearch {
     public static int indexOfMinElement(int[] arr) {
         if (arr == null || arr.length == 0)
             return -1;
-        int lo = 0;
-        int hi = arr.length - 1;
+        int left = 0;
+        int right = arr.length - 1;
         // in rotated sorted array, leftmost element is always greater than
         // rightmost element if it is rotated,
         // otherwise min element is the 1st element.
-        while (arr[lo] > arr[hi]) {
-            int mid = lo + (hi - lo) / 2;
-            if (arr[lo] > arr[mid])
-                hi = mid;
+        while (arr[left] > arr[right]) {
+            int mid = left + (right - left) / 2;
+            if (arr[left] > arr[mid])
+                right = mid;
             else
-                lo = mid + 1;
+                left = mid + 1;
         }
-        return lo;
+        return left;
     }
 
     static int indexOfMinElem_ex(int[] arr) {

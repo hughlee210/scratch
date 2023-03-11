@@ -40,9 +40,9 @@ public class Interval {
     }
 
     public static void main(String[] args) {
-        //        For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8} }. 
-        //        The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}. 
-        //        Similarly {5, 7} and {6, 8} should be merged and become {5, 8}
+        //    For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8} }.
+        //    The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}.
+        //    Similarly {5, 7} and {6, 8} should be merged and become {5, 8}
 
         List<Interval> list = new ArrayList<>();
         list.add(new Interval(2, 4));
@@ -74,7 +74,7 @@ public class Interval {
     }
 
     static List<Interval> merge(List<Interval> intervals) {
-        List<Interval> result = new ArrayList<Interval>();
+        List<Interval> result = new ArrayList<>();
         if (intervals == null || intervals.size() == 0)
             return result;
 

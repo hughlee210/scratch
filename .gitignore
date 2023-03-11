@@ -7,3 +7,4 @@
 .metadata/
 .idea
 *.iml
+!/src/main/java/com/hlee/scratch/BinaryTree.java

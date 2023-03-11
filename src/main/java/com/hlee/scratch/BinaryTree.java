@@ -1,7 +1,7 @@
 package com.hlee.scratch;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class BinaryTree<T> {
@@ -27,7 +27,12 @@ public class BinaryTree<T> {
         System.out.println("  count = " + count);
         count = 0;
 
-        System.out.println("Is this tree a BST? " + bst.isBst());
+        List<Integer> resultList = new ArrayList<>();
+        System.out.print("<printInOrderR>: ");
+        traverseInOrderR(bst.root, resultList);
+        System.out.println("result list: " + resultList);
+
+        System.out.println("\nIs this tree a BST? " + bst.isBst());
 
         List<Integer> list = new ArrayList<>();
         bst.inOrderRecur(bst.root, list);
@@ -52,6 +57,8 @@ public class BinaryTree<T> {
         // building the tree by printing inorder traversal
         System.out.println("Inorder traversal of constructed tree is : ");
         printInorderRecursive(root);
+
+
     }
 
     static class Node<T> {
@@ -89,7 +96,7 @@ public class BinaryTree<T> {
         if (node.value < min || node.value > max)
             return false;
 
-        // check sub trees recursively with updated min max range
+        // check subtrees recursively with updated min max range
         return isBst(node.left, min, node.value - 1) && isBst(node.right, node.value + 1, max);
     }
 
@@ -191,6 +198,14 @@ public class BinaryTree<T> {
         printInorderRecursive(node.right);
     }
 
+    static void traverseInOrderR(Node<Integer> node, List<Integer> list) {
+        if (node == null)
+            return;
+        traverseInOrderR(node.left, list);
+        list.add(node.value);
+        traverseInOrderR(node.right, list);
+    }
+
     public static void printPreOrderRecursive(Node node) {
         if (node == null)
             return;
@@ -252,24 +267,6 @@ public class BinaryTree<T> {
         return list;
     }
 
-    List<T> inOrderIter_ex(Node<T> root) {
-        // exercise
-        List<T> list = new ArrayList<>();
-        Node<T> node = root;
-        Stack<Node<T>> parentStack = new Stack<>();
-        while (!parentStack.isEmpty() || node != null) {
-            if (node != null) {
-                parentStack.push(node);
-                node = node.left;
-            } else {
-                node = parentStack.pop();
-                list.add(node.value);
-                node = node.right;
-            }
-        }
-        return list;
-    }
-
     // time complexity: O(N), space: O(N)
     public void findSumPair_usingArray(int sum) {
         // assume the tree is BST, so converted list using in-order traversal is sorted in ascending order
@@ -293,25 +290,6 @@ public class BinaryTree<T> {
         // then we can use HashMap to find sum pairs
     }
 
-    // time: O(n), space: O(n)
-    void findSumPair_usingArray_ex(int sum) {
-        // Exercise
-        // given root of BST, obtain a sorted list/array using in-order traversal of BST
-        List<Integer> list = (List<Integer>) inOrderIter(this.root); // time: O(N), space: O(logN) + O(N) for list
-        int l = 0, r = list.size() - 1;
-        while (l < r) {
-            if (list.get(l) + list.get(r) == sum) {
-                System.out.println("found a pair for sum " + sum + " = " + list.get(l) + " + " + list.get(r));
-                l++;
-                r--;
-            } else if (list.get(l) + list.get(r) < sum) {
-                l++;
-            } else {
-                r--;
-            }
-        }
-    }
-    
     // time: O(N), space: O(N)
     void findSumPair_usingSortedList_ex(int sum) {
         // Exercise
@@ -386,56 +364,85 @@ public class BinaryTree<T> {
         }
     }
 
-    void findSumPair_usingStack_ex(int sum) {
-        // assume the tree is BST
-        Node<Integer> node1 = (Node<Integer>) this.root;
-        Node<Integer> node2 = (Node<Integer>) this.root;
-        Stack<Node<Integer>> stack1 = new Stack<>();
-        Stack<Node<Integer>> stack2 = new Stack<>();
-        int value1 = 0, value2 = 0;
-        boolean stop1 = false, stop2 = false;
-        while (true) {
-            // find leftmost node in normal in-order traversal
-            while (!stop1) {
-                if (node1 != null) {
-                    stack1.push(node1);
-                    node1 = node1.left;
-                } else {
-                    if (!stack1.isEmpty()) {
-                        node1 = stack1.pop();
-                        value1 = node1.value;
-                        node1 = node1.right;
-                    }
-                    stop1 = true;
-                }
+    void dfs(Node node, List list) {
+        if (node == null)
+            return;
+        // preorder traversal
+        list.add(node.value);
+        if (node.left != null)
+            dfs(node.left, list);
+        if (node.right != null)
+            dfs(node.right, list);
+    }
+
+    void bfs(Node node) {
+        List list = new ArrayList();
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(node);
+        while (!queue.isEmpty()) {
+            Node currentNode = queue.poll();
+            list.add(currentNode.value);
+            if (currentNode.left != null) {
+                queue.add(currentNode.left);
             }
-
-            // find rightmost node in reverse in-order traversal
-            while (!stop2) {
-                if (node2 != null) {
-                    stack2.push(node2);
-                    node2 = node2.right;
-                } else {
-                    if (!stack2.isEmpty()) {
-                        node2 = stack2.pop();
-                        value2 = node2.value;
-                        node2 = node2.left;
-                    }
-                    stop2 = true;
-                }
+            if (currentNode.right != null) {
+                queue.add(currentNode.right);
             }
-
-            if (value1 >= value2)
-                break;
-
-            if (value1 + value2 == sum)
-                System.out.println("found a pair for sum " + sum + " = " + value1 + " + " + value2);
-            else if (value1 + value2 < sum)
-                stop1 = false;
-            else
-                stop2 = false;
         }
     }
 
+    void bfsRecur(Queue<Node> queue, List list) {
+        if (queue.isEmpty()) {
+            return;
+        }
+        Node currentNode = queue.poll();
+        list.add(currentNode.value);
+        if (currentNode.left != null) {
+            queue.add(currentNode.left);
+        }
+        if (currentNode.right != null) {
+            queue.add(currentNode.right);
+        }
+        bfsRecur(queue, list);
+    }
 
+    /**
+     *                3
+     *               / \
+     *             6     1
+     *           /  \     \
+     *          9   2      4
+     *           \
+     *            5
+     *           /
+     *          8
+     *
+     *  output: [[3], [6,1], [9,2,4], [5], [8]]
+     */
+    List<List<Integer>> bfsLevelOrderTraversal(Node<Integer> root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int queueLength = queue.size();
+            int processingCount = 0;
+            List<Integer> currentLevelValues = new ArrayList<>();
+            while (processingCount < queueLength) {
+                Node<Integer> currentNode = queue.poll();
+                currentLevelValues.add(currentNode.value);
+                if (currentNode.left != null) {
+                    queue.add(currentNode.left);
+                }
+                if (currentNode.right != null) {
+                    queue.add(currentNode.right);
+                }
+                processingCount++;
+            }
+            result.add(currentLevelValues);
+        }
+        return result;
+    }
 }

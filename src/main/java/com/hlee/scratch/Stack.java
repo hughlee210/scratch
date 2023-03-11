@@ -51,12 +51,21 @@ public class Stack<T> {
         return null;
     }
 
+    public Node<T> popNode() {
+        if (top != null) {
+            Node<T> node = top;
+            top = top.next;
+            return node;
+        }
+        return null;
+    }
+
     public int size() {
         int count = 0;
         Node<T> node = top;
         while (node != null) {
-            node = node.next;
             count++;
+            node = node.next;
         }
         return count;
     }
