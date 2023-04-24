@@ -52,7 +52,9 @@ public class WallsAndGates {
         if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length || currentStep > matrix[row][col]) {
             return;
         }
+
         matrix[row][col] = currentStep;
+
         for (int i = 0; i < DIRECTIONS.length; i++) {
             int[] currentDir = DIRECTIONS[i];
             dfs(matrix, row + currentDir[0], col + currentDir[1], currentStep + 1);

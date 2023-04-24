@@ -6,6 +6,10 @@ import java.util.Queue;
 public class RottingOranges {
 
     /**
+     * Given a 2D array containing 0's (empty cell), 1's (fresh orange) and 2's (rotten orange).
+     * Every minute, all fresh orange immediately adjacent (4 directions) to rotten oranges will rot.
+     * How many minutes must pass until all oranges are rotten?
+     *
      * 2: Rotten orange
      * 1: Fresh orange
      * 0: Empty cell
@@ -55,6 +59,10 @@ public class RottingOranges {
             {0, -1}, // left
     };
 
+    static int ROTTEN = 2;
+    static int FRESH = 1;
+    static int EMPTY = 0;
+
     int getMinutesToRotOranges(int[][] matrix) {
         // sequential order:
         // - count fresh oranges
@@ -65,10 +73,6 @@ public class RottingOranges {
         //   - rot adjacent fresh oranges
         //   - push into queue
         //   - decrement fresh orange count
-
-        final int ROTTEN = 2;
-        final int FRESH = 1;
-        final int EMPTY = 0;
 
         int freshOranges = 0;
         Queue<Integer[]> queue = new LinkedList<>();
@@ -86,11 +90,16 @@ public class RottingOranges {
             }
         }
 
+        // now we have initial rotten oranges in the queue
+        // record the current queue size
+        // when each queue element is processed, the queue size will be decremented
+        // when the queue size become 0, that means one level for the rotten oranges
+        // is processed.
         int currentQueueSize = queue.size();
         int minutes = 0;
         while (queue.size() > 0) {
             if (currentQueueSize == 0) {
-                // 0 means adjacent fresh oranges got rotten
+                // 0 means adjacent fresh oranges (one level) got rotten
                 minutes++;
                 // update currentQueueSize for the next iteration
                 currentQueueSize = queue.size();
@@ -118,4 +127,5 @@ public class RottingOranges {
         }
         return freshOranges > 0 ? -1 : minutes;
     }
+
 }

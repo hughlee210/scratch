@@ -30,7 +30,7 @@ public class Interval {
         if (this == that)
             return true;
 
-        return Objects.equals(start, that.start) && 
+        return Objects.equals(start, that.start) &&
                Objects.equals(end, that.end);
     }
 
@@ -40,10 +40,18 @@ public class Interval {
     }
 
     public static void main(String[] args) {
-        //    For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8} }.
+        //    For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8}}.
         //    The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}.
         //    Similarly {5, 7} and {6, 8} should be merged and become {5, 8}
 
+//        test1();
+
+//        test2();
+
+        test3();
+    }
+
+    private static void test1() {
         List<Interval> list = new ArrayList<>();
         list.add(new Interval(2, 4));
         list.add(new Interval(1, 3));
@@ -57,15 +65,24 @@ public class Interval {
         List<Interval> result = merge(list);
         System.out.println("result list: " + result);
         System.out.println("===================================");
-
-        test1();
     }
 
-    static void test1() {
+    static void test2() {
         List<Interval> list = new ArrayList<>();
         list.add(new Interval(3, 5));
         list.add(new Interval(1, 7));
         list.add(new Interval(8, 12));
+        System.out.println("original list: " + list);
+
+        List<Interval> result = merge(list);
+        System.out.println("result list: " + result);
+        System.out.println("===================================");
+    }
+
+    static void test3() {
+        List<Interval> list = new ArrayList<>();
+        list.add(new Interval(1, 4));
+        list.add(new Interval(3, 5));
         System.out.println("original list: " + list);
 
         List<Interval> result = merge(list);

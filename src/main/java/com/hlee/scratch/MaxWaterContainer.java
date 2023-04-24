@@ -6,7 +6,7 @@ public class MaxWaterContainer {
         int[] heights = {7, 1, 2, 3, 9};
         System.out.println("heights: " + heights);
 
-        int maxArea = getMaxWaterContainerArea(heights);
+        int maxArea = getMaxWaterContainerArea_bruteForce(heights);
         System.out.println("maxArea: " + maxArea);
 
         maxArea = getMaxWaterContainerArea_optimal(heights);
@@ -15,9 +15,9 @@ public class MaxWaterContainer {
 
     // return area of max water container
     // area = height * width = min(a, b) * (bi - ai)
-    // Time: O(N)
+    // Time: O(N^2)
     // Space: O(1)
-    private static int getMaxWaterContainerArea(int[] heights) {
+    private static int getMaxWaterContainerArea_bruteForce(int[] heights) {
         int maxArea = 0;
         for (int p1 = 0; p1 < heights.length; p1++) {
             for (int p2 = p1 + 1; p2 < heights.length; p2++) {

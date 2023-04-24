@@ -5,13 +5,13 @@ import java.util.Map;
 
 /**
  * Date 10/11/2014
- * 
+ *
  * @author Tushar Roy
  *
  *         Find single source shortest path using Dijkstra's algorithm
  *
  *         Space complexity - O(E + V)
- *         Time complexity - O(ElogV)
+ *         Time complexity - O(ElogV + NlogV) = O(ElogV)
  *
  *         References
  *         https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
@@ -24,10 +24,10 @@ public class DijkstraShortestPath {
         //heap + map data structure
         BinaryMinHeap<Vertex<Integer>> minHeap = new BinaryMinHeap<>();
 
-        //stores shortest distance from root to every vertex
+        //stores the shortest distance from root to every vertex
         Map<Vertex<Integer>, Integer> distance = new HashMap<>();
 
-        //stores parent of every vertex in shortest distance
+        //stores parent of every vertex in the shortest distance
         Map<Vertex<Integer>, Vertex<Integer>> parent = new HashMap<>();
 
         //initialize all vertex with infinite distance from source vertex

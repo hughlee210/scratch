@@ -50,6 +50,7 @@ public class TwoSumPair {
             int numberToFind = sum - nums[p1];
             for (int p2 = p1 + 1; p2 < nums.length; p2++) {
                 if (numberToFind == nums[p2]) {
+                    System.out.printf("found two sum pair for sum: %d = %d + %d\n", sum, nums[p1], nums[p2]);
                     return new int[]{p1, p2};
                 }
             }
@@ -98,7 +99,7 @@ public class TwoSumPair {
         // now fix the first element one by one and find the other two elements
         // O(n^2)
         for (int i = 0; i < arr.length - 2; i++) {
-            // find the other two elements 
+            // find the other two elements
             l = i + 1;
             r = arr.length - 1;
             while (l < r) {
@@ -128,9 +129,12 @@ public class TwoSumPair {
         }
     }
 
+    // time: O(N), space: O(N)
     static int[] findSumPair_optimal(int[] nums, int sum) {
         if (nums == null || nums.length == 0)
             return null;
+        // keeps numberToFind as a key and the index of the number used to
+        // calculate numberToFind as a value
         Map<Integer, Integer> numsMap = new HashMap<>();
         for (int p = 0; p < nums.length; p++) {
             Integer currentMapVal = numsMap.get(nums[p]);

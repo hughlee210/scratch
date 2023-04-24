@@ -8,22 +8,25 @@ import java.util.Map;
 public class Parentheses {
 
     // '{[()]}', '{}[](())'
+    // assume string only contains parenthesis characters
     boolean isValidParentheses(String s) {
         if (s.length() == 0)
             return true;
 
-        Map<Character, Character> parens = new HashMap<>();
-        parens.put('(', ')');
-        parens.put('{', '}');
-        parens.put('[', ']');
+        Map<Character, Character> parensMap = new HashMap<>(); // define parentheses pair (starting : closing)
+        parensMap.put('(', ')');
+        parensMap.put('{', '}');
+        parensMap.put('[', ']');
 
         List<Character> stack = new ArrayList<>();
         for (int i = 0; i < s.length(); i++) {
-            if (parens.containsKey(s.charAt(i))) {
+            if (parensMap.containsKey(s.charAt(i))) {
                 stack.add(s.charAt(i));
             } else {
+                // current character (s.charAt(i)) is right bracket,
+                // so expect stack top has matching left bracket
                 char leftBracket = stack.remove(stack.size() - 1);
-                char correctRightBracket = parens.get(leftBracket);
+                char correctRightBracket = parensMap.get(leftBracket);
                 if (s.charAt(i) != correctRightBracket)
                     return false;
             }

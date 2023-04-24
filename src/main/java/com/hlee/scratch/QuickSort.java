@@ -24,22 +24,24 @@ public class QuickSort {
     /**
      * Partition method, in linear time, group a list (ranging from indices left to right)
      * into two parts, those less than a pivot element,
-     * and those greater than or equal to the element.
+     * and those greater than or equal to the pivot element.
      * [5,3,4,2,6,1]
      *  i         pivot
      *  j
+     *
+     * @return pivot position
      */
-    private static int partition(int[] arr, int left, int right) {
-        int pivotValue = arr[right];
-        int partitionIndex = left; // initialize to left. position to store element less than pivot value
-        for (int j = left; j < right; j++) {
-            if (arr[j] < pivotValue) {
-                swap(arr, partitionIndex, j);
-                partitionIndex++;
+    private static int partition(int[] nums, int left, int right) {
+        int pivotValue = nums[right];
+        int i = left; // i (partition index) initialize to left. position to store element less than pivot value
+        for (int j = left; j < right; j++) { // number at j to compare with pivot value
+            if (nums[j] < pivotValue) {
+                swap(nums, i, j);
+                i++;
             }
         }
-        swap(arr, partitionIndex, right); // move pivot element to its final sorted place
-        return partitionIndex; // return sorted pivot position
+        swap(nums, i, right); // move pivot element to its final sorted place
+        return i; // return sorted pivot position (partition position)
     }
 
     private static void swap(int[] arr, int x, int y) {
@@ -57,11 +59,11 @@ public class QuickSort {
 
     // Time: O(NlogN); partition time (N) * number of partition call (logN)
     // Space: O(logN); how many times it's called (stack space)
-    static void quickSort(int[] arr, int left, int right) {
+    static void quickSort(int[] nums, int left, int right) {
         if (left < right) {
-            int partitionIndex = partition(arr, left, right); // Time: O(N)
-            quickSort(arr, left, partitionIndex - 1);
-            quickSort(arr, partitionIndex + 1, right);
+            int partitionIndex = partition(nums, left, right); // Time: O(N)
+            quickSort(nums, left, partitionIndex - 1);
+            quickSort(nums, partitionIndex + 1, right);
         }
     }
 
@@ -73,15 +75,15 @@ public class QuickSort {
      * Time: O(N + N/2 + N/4 + N/8 + ...) = O(2N) = O(N)
      * Space: O(1) if compiler supports tail recursion
      */
-    static int quickSelect(int[] arr, int left, int right, int indexToFind) {
+    static int quickSelect(int[] nums, int left, int right, int indexToFind) {
         if (left < right) {
-            int partitionIndex = partition(arr, left, right);
+            int partitionIndex = partition(nums, left, right);
             if (partitionIndex == indexToFind) {
-                return arr[partitionIndex];
+                return nums[partitionIndex];
             } else if (indexToFind < partitionIndex) {
-                return quickSelect(arr, left, partitionIndex - 1, indexToFind);
+                return quickSelect(nums, left, partitionIndex - 1, indexToFind);
             } else {
-                return quickSelect(arr, partitionIndex + 1, right, indexToFind);
+                return quickSelect(nums, partitionIndex + 1, right, indexToFind);
             }
         }
         throw new IllegalArgumentException("left and right arguments are not a valid");
