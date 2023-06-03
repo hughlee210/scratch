@@ -1,14 +1,14 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Quickselect uses the same overall approach as quicksort, choosing one element as a pivot 
- * and partitioning the data in two based on the pivot, accordingly as less than or greater than the pivot. 
+ * Quickselect uses the same overall approach as quicksort, choosing one element as a pivot
+ * and partitioning the data in two based on the pivot, accordingly as less than or greater than the pivot.
  * However, instead of recursing into both sides as in quicksort, quickselect only recurses into one side
- * – the side with the element it is searching for. 
- * This reduces the average complexity from O(NlogN) to O(N), with a worst case of O(N^2).
+ * – the side with the element it is searching for.
+ * This reduces the average time complexity from O(NlogN) to O(N), with a worst case of O(N^2).
  */
 public class QuickSelectFindKthElement {
 
@@ -40,8 +40,8 @@ public class QuickSelectFindKthElement {
     }
 
     /**
-     * Partition method, in linear time, group a list (ranging from indices left to right) 
-     * into two parts, those less than a pivot element, 
+     * Partition method, in linear time, group a list (ranging from indices left to right)
+     * into two parts, those less than a pivot element,
      * and those greater than or equal to the element.
      */
     private static int partition(int[] arr, int left, int right) {
@@ -111,12 +111,12 @@ public class QuickSelectFindKthElement {
     }
 
     /*
-    Note the resemblance to quicksort: just as the minimum-based selection algorithm is a partial selection sort, 
-    this is a partial quicksort, generating and partitioning only O(log n) of its O(n) partitions. 
-    This simple procedure has expected linear performance, and, like quicksort, has quite good performance in practice. 
+    Note the resemblance to quicksort: just as the minimum-based selection algorithm is a partial selection sort,
+    this is a partial quicksort, generating and partitioning only O(log n) of its O(n) partitions.
+    This simple procedure has expected linear performance, and, like quicksort, has quite good performance in practice.
     It is also an in-place algorithm, requiring only constant memory overhead, since the tail recursion can be
     eliminated with a loop like this:
-    
+
     function select(list, left, right, n)
      if left = right
          return list[left]

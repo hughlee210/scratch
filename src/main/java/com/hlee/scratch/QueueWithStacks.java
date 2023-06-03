@@ -1,5 +1,7 @@
 package com.hlee.scratch;
 
+import com.hlee.scratch.stack.Stack;
+
 public class QueueWithStacks {
 
     Stack<Integer> in = new Stack<>();

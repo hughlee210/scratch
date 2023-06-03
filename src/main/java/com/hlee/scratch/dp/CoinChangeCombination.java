@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.dp;
 
 public class CoinChangeCombination {
 
@@ -10,19 +10,19 @@ public class CoinChangeCombination {
         int amount = 3;
 
         long start = System.currentTimeMillis();
-        int numCombos = coinCombos(coins, 0, amount);
+        int numCombos = coinCountWays(coins, 0, amount);
         long end = System.currentTimeMillis();
         System.out.printf("brute force top-down recursive: time taken = %d milliseconds, number of combinations = %d\n", (end - start), numCombos);
 
         // form dp array
         int[][] dp = new int[coins.length][amount + 1];
         start = System.currentTimeMillis();
-        numCombos = coinCombos_dp_recur(coins, 0, amount, dp);
+        numCombos = coinCountWays_dp_recur(coins, 0, amount, dp);
         end = System.currentTimeMillis();
         System.out.printf("top-down recursive with dp    : time taken = %d milliseconds, number of combinations = %d\n", (end - start), numCombos);
 
         start = System.currentTimeMillis();
-        numCombos = coinCombos_dp_iterative(coins, amount);
+        numCombos = coinCountWays_dp_iterative(coins, amount);
         end = System.currentTimeMillis();
         System.out.printf("botton-up iterative with dp   : time taken = %d milliseconds, number of combinations = %d\n", (end - start), numCombos);
 
@@ -36,13 +36,10 @@ public class CoinChangeCombination {
     /**
      * Given an infinite supply of coins of different coins,
      * find the number of ways to make change for a value 'amount'
-     *
-     *  coins = {2, 3, 5}
-     *  amount = 7      {2, 2, 3}, {2, 5}
+     *  coins = {2, 3, 5},  amount = 7,  ways: {2, 2, 3}, {2, 5}
      *
      *  There are two options: coin selected or not selected
-     *      Option 1 - pick a coin
-     *      Option 2 - discard a coin
+     *  [Option 1] - pick a coin,    [Option 2] - discard a coin
      *
      *                                               7 {2,3,5}
      *                                   / (pick)                     \ (discard)
@@ -53,9 +50,8 @@ public class CoinChangeCombination {
      *            1 {2,3,5}   3 {3,5}    2 {3,5}    5 {5}     1 {3,5}  4 {5}   2 {5}  7 {}
      *            /    \       /  \       /         /  \
      *   -1 {2,3,5}  1 {3,5}  0  3 {5}  -1         0
-     *
      */
-    private static int countWaysRecursive(int[] coins, int startIndex, int amount) {
+    private static int countWaysRecursive(int[] coins, int coinIndex, int amount) {
         // base case for n == 0 and n < 0
         if (amount == 0) {
             return 1; // 1 way
@@ -63,12 +59,12 @@ public class CoinChangeCombination {
         if (amount < 0) {
             return 0; // no ways
         }
-        if (startIndex == coins.length) {
+        if (coinIndex == coins.length) {
             return 0;
         }
 
-        return countWaysRecursive(coins, startIndex, amount - coins[startIndex]) // option 1 (pick coin)
-                + countWaysRecursive(coins, startIndex + 1, amount); // option 2 (discard coin)
+        return countWaysRecursive(coins, coinIndex, amount - coins[coinIndex]) // option 1 (pick coin)
+                + countWaysRecursive(coins, coinIndex + 1, amount); // option 2 (discard coin)
     }
 
     /**
@@ -114,7 +110,7 @@ public class CoinChangeCombination {
      *                 /-1  |-2  \-3   /-1 |-2 \-3
      *                1     0          0
      */
-    static int coinCombos(int[] coins, int startIndex, int amount) {
+    static int coinCountWays(int[] coins, int startIndex, int amount) {
         if (amount == 0) {
             return 1; // we have combination
         }
@@ -124,7 +120,7 @@ public class CoinChangeCombination {
 
         int ways = 0;
         for (int i = startIndex; i < coins.length; i++) {
-            ways = ways + coinCombos(coins, i,amount - coins[i]);
+            ways = ways + coinCountWays(coins, i,amount - coins[i]);
         }
         return ways;
     }
@@ -134,7 +130,7 @@ public class CoinChangeCombination {
      * Time complexity: O(N * amount) where N is number of coins
      * Space complexity: O(N * amount)
      */
-    static int coinCombos_dp_recur(int[] coins, int startIndex, int amount, int[][] dp) {
+    static int coinCountWays_dp_recur(int[] coins, int startIndex, int amount, int[][] dp) {
         if (amount == 0) {
             return 1; // we have combination
         }
@@ -149,7 +145,7 @@ public class CoinChangeCombination {
 
         int ways = 0;
         for (int i = startIndex; i < coins.length; i++) {
-            ways = ways + coinCombos_dp_recur(coins, i, amount - coins[i], dp);
+            ways = ways + coinCountWays_dp_recur(coins, i, amount - coins[i], dp);
         }
         dp[startIndex][amount] = ways;
         return dp[startIndex][amount];
@@ -173,7 +169,7 @@ public class CoinChangeCombination {
      *      (i.e. from 1 to a given amount).
      * Space Complexity: O(amount) as extra space for storing the max possible ways for each amount that has been used.
      */
-    static int coinCombos_dp_iterative(int[] coins, int amount) {
+    static int coinCountWays_dp_iterative(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
         dp[0] = 1; // 1 way to make change 0: use 0 coin
         for (int i = 0; i < coins.length; i++) {

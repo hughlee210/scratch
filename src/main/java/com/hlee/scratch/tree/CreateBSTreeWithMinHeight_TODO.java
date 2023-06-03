@@ -1,12 +1,12 @@
-package com.hlee.scratch;
+package com.hlee.scratch.tree;
 
 public class CreateBSTreeWithMinHeight_TODO {
 
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-		createMinHeightBST(arr);	
+		createMinHeightBST(arr);
 	}
-	
+
 	public static TreeNode createMinHeightBST(int[] arr) {
 		return createMinHeightBST(arr, 0, arr.length -1 );
 	}
@@ -21,10 +21,10 @@ public class CreateBSTreeWithMinHeight_TODO {
 		TreeNode node = new TreeNode(arr[mid]);
 		node.left = createMinHeightBST(arr, l, mid - 1);
 		node.right = createMinHeightBST(arr, mid + 1, r);
-		return node;		
-	}	
-	
-	static class TreeNode {		
+		return node;
+	}
+
+	static class TreeNode {
 		TreeNode left;
 		TreeNode right;
 		int data;

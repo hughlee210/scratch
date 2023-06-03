@@ -20,7 +20,7 @@ public class LRUCache {
         if (cacheMap.containsKey(dataKey)) {
             // If dataKey is present in the cache, move the page to the start of list
             node = cacheMap.get(dataKey);
-            cacheList.moveDataNodeToHead(node);
+            cacheList.moveDataToHead(node);
         } else {
             // If the data is not present in the cache, add the data to the cache
             if (cacheList.currSize == cacheList.cacheSize) {
@@ -28,7 +28,7 @@ public class LRUCache {
                 // Remove it from map too
                 cacheMap.remove(cacheList.tail.data);
             }
-            node = cacheList.addDataNodeToList(dataKey);
+            node = cacheList.addDataToList(dataKey);
             cacheMap.put(dataKey, node);
         }
     }
@@ -102,7 +102,7 @@ class DoublyLinkedList {
         }
     }
 
-    public Node addDataNodeToList(int data) {
+    public Node addDataToList(int data) {
         Node newNode = new Node(data);
         if (head == null) {
             head = tail = newNode;
@@ -121,7 +121,7 @@ class DoublyLinkedList {
         return newNode;
     }
 
-    public void moveDataNodeToHead(Node node) {
+    public void moveDataToHead(Node node) {
         if (node == null || node == head) {
             return;
         }

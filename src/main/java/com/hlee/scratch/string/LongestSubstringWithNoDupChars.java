@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.string;
 
 import java.util.HashMap;
 import java.util.Map;

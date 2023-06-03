@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -34,7 +34,7 @@ public class QuickSort {
     private static int partition(int[] nums, int left, int right) {
         int pivotValue = nums[right];
         int i = left; // i (partition index) initialize to left. position to store element less than pivot value
-        for (int j = left; j < right; j++) { // number at j to compare with pivot value
+        for (int j = left; j < right; j++) { // j: scan index, number at j to compare with pivot value
             if (nums[j] < pivotValue) {
                 swap(nums, i, j);
                 i++;

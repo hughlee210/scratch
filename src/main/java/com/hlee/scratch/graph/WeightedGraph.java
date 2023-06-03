@@ -9,17 +9,17 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
-import com.hlee.scratch.Stack;
+import com.hlee.scratch.stack.Stack;
 
 // https://medium.com/basecs/finding-the-shortest-path-with-a-little-help-from-dijkstra-613149fbdc8e
 //
 public class WeightedGraph<T> {
 
     List<Vertex> vertices = new ArrayList<>();
-    
+
     List<Edge> edges = new ArrayList<>();
 
-    // do you need rootVertex? 
+    // do you need rootVertex?
 
     // key: Vertex, value: CostInfo with smallest cost and previous vertex
     Map<Vertex, CostInfo> costInfoMap = new HashMap<>();
@@ -67,7 +67,7 @@ public class WeightedGraph<T> {
             return sb.toString();
         }
     }
-    
+
     static class Edge {
         Vertex origin;
         Vertex dest;
@@ -107,7 +107,7 @@ public class WeightedGraph<T> {
             return sb.toString();
         }
     }
-    
+
     static class CostInfo {
         Integer cost = Integer.MAX_VALUE;
         Vertex prevVertex; // vertex from which the cost is calculated
@@ -160,10 +160,10 @@ public class WeightedGraph<T> {
 
     public void findSmallestCost(Vertex origin, Vertex dest) {
         if (vertices.contains(origin) && vertices.contains(dest)) {
-            
+
             Vertex vertex = null;
             // lookup the cost info map and pick up the unvisited vertex with smallest cost
-            
+
             while ((vertex = lookupSmallestCostVertex()) != null) {
                 // for each neighbor or the current vertex, calculate the cost to each neighbor
                 // and update the cost info map
@@ -172,7 +172,7 @@ public class WeightedGraph<T> {
                 // now we are done calculating the cost to each neighbor of the vertex
                 vertex.visited = true;
             }
-            
+
             // find the smallest cost from origin to destination using stack
             Integer smallestCost = costInfoMap.get(dest).cost;
 
@@ -264,5 +264,5 @@ public class WeightedGraph<T> {
         graph.findSmallestCost(vA, vB);
 
     }
-    
+
 }

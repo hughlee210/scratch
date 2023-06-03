@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.string;
 
 public class Palindrome {
 

@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 import java.util.Arrays;
 

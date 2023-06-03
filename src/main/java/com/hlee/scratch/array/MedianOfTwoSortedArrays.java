@@ -1,4 +1,6 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
+
+import com.hlee.scratch.array.MergeTwoSortedArray;
 
 import java.util.Arrays;
 
@@ -11,7 +13,7 @@ public class MedianOfTwoSortedArrays {
         System.out.println("arr1 = " + Arrays.toString(arr1) + ", median = " + findMedian(arr1));
         System.out.println("arr2 = " + Arrays.toString(arr2) + ", median = " + findMedian(arr2));
         System.out.println("-----------------------------------");
-        
+
         double median = findMedian_usingMerge(arr1, arr2);
         System.out.println("Median of two arrays = " + median);
         System.out.println("-----------------------------------");
@@ -59,38 +61,38 @@ public class MedianOfTwoSortedArrays {
     // "Dividing a set into two equal length subsets, that one subset is always greater than the other."
     //
     // Use binary search technique to find a correct partition of both arrays
-    // such that the combined number of elements of array X and array Y on left side of partition is equal to 
+    // such that the combined number of elements of array X and array Y on left side of partition is equal to
     // the combined number of elements of array X and array Y on right side of partition.
     // If total number of elements of both arrays is odd, left side has one more element than right side.
     //
     // Example:
     //
     // x1 x2 | x3 x4 x5 x6  (6 elements)
-    // 
+    //
     // y1 y2 y3 y4 y5 | y6 y7 y8  (8 elements)
     //
-    // Let's assume we found the correct partition as described above, 
+    // Let's assume we found the correct partition as described above,
     // every element on the left side would be less than every element on the right of partition.
     // So, we can derive the following from the above statement.
     // x2 <= y6
-    // y5 <= x3 
+    // y5 <= x3
     // If we find the partition, we know that those are the four elements which matter
     // because the median should be around those 4 elements.
     // So, we know that the median in the above case.
     // Median = avg( max(x2,y5), min(x3,y6)) for even number of total elements
     // Median = max(x2, y5) for odd number of total elements
-    // 
+    //
     // [Condition to satisfy to use this algorithm]
     //
     // Number of elements of arrayX on left side of partition + Number of elements of arrayY on left side of partition
     // = half of total number of elements of both arrays
     //
-    // partitionX + partitionY = (x + y + 1) / 2   : + 1 is to take care of odd size case 
-    // 
+    // partitionX + partitionY = (x + y + 1) / 2   : + 1 is to take care of odd size case
+    //
     // partitionY = (x + y + 1) / 2 - partitionX
-    // 
+    //
     // If we found the correct partition, below must be true:
-    //              max of Left X <= min of Right Y 
+    //              max of Left X <= min of Right Y
     //              max of Left Y <= min of Right X
     //
     // else if      max of Left X >  min of Right Y,  we are too much on the right side
@@ -99,10 +101,10 @@ public class MedianOfTwoSortedArrays {
     // else         move towards right side in X
     //
     // Time complexity: O(log(min(x,y))), Space: O(1)
-    // 
+    //
     static double findMedian_withoutMerge_usingPartition(int[] arrX, int[] arrY) {
         //if input1 length is greater, then switch them so that input1 is smaller than input2.
-        // in order to achieve less time complexity. 
+        // in order to achieve less time complexity.
         if (arrX.length > arrY.length) {
             return findMedian_withoutMerge_usingPartition(arrY, arrX);
         }

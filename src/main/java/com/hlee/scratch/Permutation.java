@@ -58,8 +58,9 @@ public class Permutation {
         }
         char firstEl = str.charAt(0);
         String rest = str.substring(1); // this creates a copy of new array, so O(n) space
-        List<String> permWithoutFirst = permutations(rest);
+
         List<String> allPermutations = new ArrayList<>();
+        List<String> permWithoutFirst = permutations(rest);
 
         for (int i = 0; i < permWithoutFirst.size(); i++) {
             String perm = permWithoutFirst.get(i);
@@ -87,18 +88,6 @@ public class Permutation {
         }
     }
 
-    private static void perm(String prefix, String str) {
-        int len = str.length();
-        if (len == 0)
-            System.out.println(prefix);
-        else {
-            for (int i = 0; i < len; i++) {
-                System.out.println("prefix: " + prefix);
-                perm(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1));
-            }
-        }
-    }
-
     /**
      * Iterative
      *
@@ -107,22 +96,27 @@ public class Permutation {
      *
      * 1) construct a string with first character e.g. 'a' and store that in
      * results.
+     * char[] chars = test_str.toCharArray(); results.add(new String("" + chars[0]));
      *
-     * char[] chars = test_str.toCharArray(); results.add(new String("" +
-     * chars[0])); 2) Now take next character in string (i.e. 'b') and insert
-     * that in all possible positions of previously contsructed strings in
+     * 2) Now take next character in string (i.e. 'b') and insert
+     * that in all possible positions of previously constructed strings in
      * results. Since we have only one string in results ("a") at this point,
      * doing so gives us 2 new strings 'ba', 'ab'. Insert these newly
      * constructed strings in results and remove "a".
      *
-     * for(int j=cur_size-1; j>=0; j--) { String str = results.remove(j);
-     * for(int k=0; k<=str.length(); k++) { results.add(str.substring(0,k) + c +
-     * str.substring(k)); } } 3) Repeat 2) for every character in the given
-     * string.
+     * for(int j=cur_size-1; j>=0; j--) {
+     *   String str = results.remove(j);
+     *   for(int k=0; k<=str.length(); k++) {
+     *     results.add(str.substring(0,k) + c + str.substring(k));
+     *   }
+     * }
      *
-     * for(int i=1; i<chars.length; i++) { char c = chars[i]; .... .... } This
-     * gives us "cba", "bca", "bac" from "ba" and "cab", "acb" and "abc" from
-     * "ab"
+     * 3) Repeat 2) for every character in the given string.
+     *
+     * for(int i=1; i<chars.length; i++) {
+     *   char c = chars[i]; .... ....
+     * }
+     * This gives us "cba", "bca", "bac" from "ba" and "cab", "acb" and "abc" from "ab"
      */
     public static void permutationIter(String input) {
         List<String> results = new ArrayList<>();

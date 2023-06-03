@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.string;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,9 +20,6 @@ public class Anagram {
         for (char ch : arr) {
             System.out.println(ch + " = " + (int) ch);
         }
-        //        for (int i = 0; i < 256; i++) {
-        //            System.out.println(i + " = " + (char) i);
-        //        }
     }
 
     /**
@@ -89,12 +86,8 @@ public class Anagram {
         // time: O(N)
         for (int i = 0; i < s2.length(); i++) {
             char ch = s2.charAt(i);
-            if (countsMap.containsKey(ch)) {
-                if (countsMap.get(ch) == 0) {
-                    return false;
-                } else {
-                    countsMap.put(ch, countsMap.get(ch) - 1);
-                }
+            if (countsMap.containsKey(ch) && countsMap.get(ch) > 0) {
+                countsMap.put(ch, countsMap.get(ch) - 1);
             } else {
                 return false;
             }

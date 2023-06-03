@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ public class TwoSumPair {
         }
     }
 
+    // time complexity: O(n**2), space: O(1)
     static int[] findSumPair_brute(int[] nums, int sum) {
         if (nums == null || nums.length == 0)
             return null;
@@ -70,9 +71,9 @@ public class TwoSumPair {
     }
 
     // time complexity: O(nlogn), space: vary depending on sorting algorithm
-    static void findSumPair_usingSort(int[] arr, int sum) {
+    static int[] findSumPair_usingSort(int[] arr, int sum) {
         if (arr == null || arr.length == 0)
-            return;
+            return null;
         int[] arr2 = Arrays.copyOf(arr, arr.length);
         Arrays.sort(arr2); // O(nlogn)
         int l = 0;
@@ -87,8 +88,10 @@ public class TwoSumPair {
                 System.out.println("found two num for sum: " + arr2[l] + " + " + arr2[r] + " = " + sum);
                 l++;
                 r--;
+                return new int[]{l, r};
             }
         }
+        return null; //TODO: fix this
     }
 
     static void findSumTriplet_usingSort(int[] arr, int sum) {
@@ -129,6 +132,9 @@ public class TwoSumPair {
         }
     }
 
+    // ex:
+    // int[] arr = { 1, 10, 2, 3, 9, 8, 7, 4, 5, 6 };
+    // int sum = 10;
     // time: O(N), space: O(N)
     static int[] findSumPair_optimal(int[] nums, int sum) {
         if (nums == null || nums.length == 0)

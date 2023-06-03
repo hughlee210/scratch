@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 import java.util.Arrays;
 
@@ -32,7 +32,7 @@ public class MergeTwoSortedArray {
         System.out.println("Median = " + median);
         /////////////////////////////////////////////////////////////////////
 
-        // -1 to indicate unoccupied space        
+        // -1 to indicate unoccupied space
         int[] array1 = { 1, 18, 22, 100, 105, 1002, -1, -1, -1, -1, -1 };
         int[] array2 = { 16, 17, 19, 21, 1001 };
 
@@ -62,7 +62,7 @@ public class MergeTwoSortedArray {
     //
     public static int[] mergeArrays_extraSpace(int[] arr1, int[] arr2) {
 
-        // assumption: arr1 and arr2 are not null        
+        // assumption: arr1 and arr2 are not null
         int i = 0, j = 0, k = 0;
         int[] arr3 = new int[arr1.length + arr2.length];
 
@@ -92,8 +92,8 @@ public class MergeTwoSortedArray {
     // time complexity: O(n), space: O(1)
     static void mergeArrays_noSpace(int[] arr1, int[] arr2) {
         // assumption: arr1 has extra space to hold all elements of arr2
-        //      // -1 to indicate unoccupied space        
-        //        int[] arr1 = { 1, 18, 22, 100, 105, 1002, -1, -1, -1, -1, -1 }; 
+        //      // -1 to indicate unoccupied space
+        //        int[] arr1 = { 1, 18, 22, 100, 105, 1002, -1, -1, -1, -1, -1 };
         //        int[] arr2 = { 16, 17, 19, 21, 1001 };
 
         int i = arr1.length - arr2.length - 1; // i = last element index of valid elements (non -1) in arr1

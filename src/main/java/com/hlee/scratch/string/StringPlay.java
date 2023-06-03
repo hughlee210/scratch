@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.string;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,9 +21,9 @@ public class StringPlay {
         System.out.println(testStr + " is unique? " + isUnique_usingHashMap(testStr.toCharArray()));
 
 	}
-	
+
 	private static void reverseStr(String str) {
-		
+
 		char[] arr = str.toCharArray();
 		System.out.println("original str = " + Arrays.toString(arr));
 		int l = 0;
@@ -38,10 +38,10 @@ public class StringPlay {
 		}
 		System.out.println("reversed str = " + Arrays.toString(arr));
 	}
-	
+
     // time: O(n^2)
     static boolean isUnique_bruteForce(String str) {
-        // 
+        //
         if (str == null)
             return false;
         char[] arr = str.toCharArray();

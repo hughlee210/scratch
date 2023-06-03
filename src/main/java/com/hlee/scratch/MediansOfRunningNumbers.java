@@ -18,11 +18,8 @@ public class MediansOfRunningNumbers {
     static double[] getMedians(int[] arr) {
 
         // max heap
-        PriorityQueue<Integer> lowers = new PriorityQueue<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return -1 * o1.compareTo(o2); // big element on top
-            }
+        PriorityQueue<Integer> lowers = new PriorityQueue<>((o1, o2) -> {
+            return -1 * o1.compareTo(o2); // big element on top
         });
 
         // min heap

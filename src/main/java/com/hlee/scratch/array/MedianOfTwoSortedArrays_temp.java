@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.array;
 
 // Only works for same length arrays
 //
@@ -23,17 +23,17 @@ public class MedianOfTwoSortedArrays_temp {
 
         System.out.println("Median: " + solution.findMedianSortedArrays(c, d, 0, c.length - 1, 0, d.length - 1));
     }
-    
+
     public int max(int a, int b)
     {
         return (a > b) ? a : b;
     }
-      
+
     public int min(int a, int b)
     {
         return (a < b) ? a : b;
     }
-      
+
     private double findMedian(int[] array, int startIndex, int endIndex)
     {
         int indexDiff = (endIndex - startIndex);
@@ -46,36 +46,36 @@ public class MedianOfTwoSortedArrays_temp {
             return 1.0*(array[startIndex + (indexDiff/2)] + array[startIndex + (indexDiff/2) + 1])/2;
         }
     }
-     
+
     // a: 1,2,5,11,15  // b: 3 4 13 17 18
     public double findMedianSortedArrays(int[] a, int[] b, int startIndexA, int endIndexA, int startIndexB, int endIndexB)
     {
-        
+
         if ((endIndexA - startIndexA < 0) || ((endIndexB - startIndexB < 0)))
         {
             System.out.println("Invalid Input.");
             return ERROR_INVALID_INPUT;
         }
- 
+
         if ((endIndexA - startIndexA == 0) && ((endIndexB - startIndexB == 0)))
         {
             return (a[0] + b[0])/2;
         }
-         
+
         if ((endIndexA - startIndexA == 1) && ((endIndexB - startIndexB == 1)))
         {
             return (1.0*(max(a[startIndexA], b[startIndexB]) + min(a[endIndexA], b[endIndexB])))/2;
         }
-          
+
         double m1 = findMedian(a, startIndexA, endIndexA);
         double m2 = findMedian(b, startIndexB, endIndexB);
-          
+
         if (m2 == m1)
         {
             return m2;
         }
-          
-        // since m1 <= median <= m2 narrow down search by eliminating elements less than m1 and elements greater than m2  
+
+        // since m1 <= median <= m2 narrow down search by eliminating elements less than m1 and elements greater than m2
         if (m1 < m2)
         {
             if ((endIndexA - startIndexA) % 2 == 0) // we are looking at odd number of elements
@@ -86,10 +86,10 @@ public class MedianOfTwoSortedArrays_temp {
             else
             {
                 startIndexA = startIndexA + (endIndexA - startIndexA) / 2;
-                endIndexB = startIndexB + (endIndexB - startIndexB) / 2 + 1;                
+                endIndexB = startIndexB + (endIndexB - startIndexB) / 2 + 1;
             }
         }
-          
+
         // since m2 <= median <= m1 narrow down search by eliminating elements less than m2 and elements greater than m1
         else // m2 < m1
         {
@@ -101,10 +101,10 @@ public class MedianOfTwoSortedArrays_temp {
             else
             {
                 startIndexB = startIndexB + (endIndexB - startIndexB) / 2;
-                endIndexA = startIndexA + (endIndexA - startIndexA) / 2 + 1;                
+                endIndexA = startIndexA + (endIndexA - startIndexA) / 2 + 1;
             }
         }
         return findMedianSortedArrays(a, b, startIndexA, endIndexA, startIndexB, endIndexB);
     }
-      
+
 }

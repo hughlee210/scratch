@@ -1,4 +1,4 @@
-package com.hlee.scratch;
+package com.hlee.scratch.tree;
 
 import java.util.*;
 import java.util.LinkedList;
@@ -87,6 +87,7 @@ public class BinaryTree<T> {
 
     // time complexity: O(N)
     // space: O(1) if Function Call Stack size is not considered, otherwise O(N)
+    // otherwise O(N) worst case O(h) = O(logN) for complete tree
     boolean isBst(Node<Integer> node, int min, int max) {
         // empty tree is BST
         if (node == null)
@@ -107,8 +108,8 @@ public class BinaryTree<T> {
     //
     // Construct Tree from given Inorder and Preorder traversals
     //
-    //    In a Preorder sequence, leftmost element is the root of the tree. So we know ‘A’ is root for given sequences. 
-    // By searching ‘A’ in Inorder sequence, we can find out all elements on left side of ‘A’ are in left subtree 
+    //    In a Preorder sequence, leftmost element is the root of the tree. So we know ‘A’ is root for given sequences.
+    // By searching ‘A’ in Inorder sequence, we can find out all elements on left side of ‘A’ are in left subtree
     // and elements on right are in right subtree. So we know below structure now.
     //
     //          1
@@ -134,12 +135,12 @@ public class BinaryTree<T> {
     //  5) Call buildTree for elements after inIndex and make the built tree as right subtree of tNode.
     //  6) return tNode.
     //
-    // Time Complexity: O(n^2). Worst case occurs when tree is left skewed. 
+    // Time Complexity: O(n^2). Worst case occurs when tree is left skewed.
     // Example Preorder and Inorder traversals for worst case are {A, B, C, D} and {D, C, B, A}.
     //
     // O(NlogN) if the tree is balanced
     // O(N^2) if the tree a linked list
-    // 
+    //
     // https://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
     // https://stackoverflow.com/questions/20922969/time-complexity-of-construction-of-a-binary-tree-from-inorder-and-preorder-trave
     //
@@ -158,7 +159,7 @@ public class BinaryTree<T> {
         // Else find the index of this value in inorder traversal array
         int inIndex = search(inorderArr, node.value, inStart, inEnd);
 
-        // inIndex is the index of parent index that divides the inorder array 
+        // inIndex is the index of parent index that divides the inorder array
         // into left and right sub trees
         // using index in inorder traversal, construct left and right sub trees
         //
@@ -183,10 +184,10 @@ public class BinaryTree<T> {
 
     /**
      * time: O(N), space: O(height of tree)
-     * The space complexity of this traversal seems to be O(h) where h is height of tree. 
-     * The best way to think about space complexity of recursive functions is 
-     * (# of stack frames)*(space per stack frame). In your case, in worst case, 
-     * you can have h stack frames. With each stack frame having O(1) space. 
+     * The space complexity of this traversal seems to be O(h) where h is height of tree.
+     * The best way to think about space complexity of recursive functions is
+     * (# of stack frames)*(space per stack frame). In your case, in worst case,
+     * you can have h stack frames. With each stack frame having O(1) space.
      * So total space complexity is O(h).
      */
     public static void printInorderRecursive(Node node) {
@@ -270,7 +271,7 @@ public class BinaryTree<T> {
     // time complexity: O(N), space: O(N)
     public void findSumPair_usingArray(int sum) {
         // assume the tree is BST, so converted list using in-order traversal is sorted in ascending order
-        List<Integer> list = (List<Integer>) visitInOrder(false); // time: O(N), space: O(logN) + O(N) for list 
+        List<Integer> list = (List<Integer>) visitInOrder(false); // time: O(N), space: O(logN) + O(N) for list
         // now we have sorted list
         int l = 0;
         int r = list.size() - 1;
@@ -286,27 +287,8 @@ public class BinaryTree<T> {
                 r--;
             }
         }
-        // if the tree is not BST and the list is not sorted, 
+        // if the tree is not BST and the list is not sorted,
         // then we can use HashMap to find sum pairs
-    }
-
-    // time: O(N), space: O(N)
-    void findSumPair_usingSortedList_ex(int sum) {
-        // Exercise
-        // given root of BST, obtain a sorted list using in-order traversal of BST
-        List<Integer> list = (List<Integer>) inOrderIter(this.root);
-        int l = 0, r = list.size() - 1;
-        while (l < r) {
-            if (list.get(l) + list.get(r) == sum) {
-                System.out.println("found a pair for sum " + sum + " = " + list.get(l) + " + " + list.get(r));
-                l++;
-                r--;
-            } else if (list.get(l) + list.get(r) < sum) {
-                l++;
-            } else {
-                r--;
-            }
-        }
     }
 
     // time complexity: O(N), space: O(logN)

@@ -1,8 +1,8 @@
-package com.hlee.scratch;
+package com.hlee.scratch.binarysearch;
 
 import java.util.Arrays;
 
-public class BinarySearch {
+public class BinarySearchForArray {
 
     public static void main(String[] args) {
         int[] arr = { 1, 2, 3, 4, 5, 6, 7 };
@@ -40,7 +40,7 @@ public class BinarySearch {
 
     /**
      * assume arr is sorted in ascending order
-     * time: O(logN), space: O(1) 
+     * time: O(logN), space: O(1)
      * return index of key
      */
     public static int bs(int[] arr, int key) {
@@ -74,6 +74,8 @@ public class BinarySearch {
                 return mid;
             else if (key < arr[mid])
                 return rBS(arr, key, left, mid - 1);
+            else
+                return rBS(arr, key, mid + 1, right);
         }
         return -1;
     }
@@ -82,7 +84,7 @@ public class BinarySearch {
      * This is similar to binary search, but modified to work for rotated sorted
      * array, so more general than binary search as it works for both rotated
      * and non-rotated arrays.
-     * In rotated sorted array [5,6,7,8,9,1,2,3,4], 
+     * In rotated sorted array [5,6,7,8,9,1,2,3,4],
      * leftmost element is always greater than rightmost element if array is rotated.
      */
     public static int indexOfElementInRotatedArray(int[] arr, int key) {
@@ -116,9 +118,9 @@ public class BinarySearch {
     /**
      * Find rotation pivot index. Works for both rotated and non-rotated array.
      * Return the index of min element in rotated sorted array.
-     * In rotated sorted array [3,4,5,1,2],
+     * In rotated sorted array [9,1,2,3,4,5],
      * leftmost element is always greater than rightmost element if rotated,
-     * otherwise min element is the 1st element. 
+     * otherwise min element is the 1st element.
      */
     public static int indexOfMinElement(int[] arr) {
         if (arr == null || arr.length == 0)

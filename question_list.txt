@@ -13,6 +13,11 @@
 13. Factorial (recursion, tail recursion)
 14. Quick sort, kth largest element (recursion)
 15. Quick select
+16. Range search (binary search)
+17. Maximum depth of the true (binary search)
+18. Level order (binary search)
+
+
 16. 2D array (TwoDArray): DFS, BFS
 17. 2D array: Number of islands
 18. 2D array: Rotting oranges
