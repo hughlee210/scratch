@@ -23,6 +23,34 @@ public class NetworkDelayTime {
         System.out.println("minHeap = " + minHeap);
         System.out.println("get top = " + minHeap.poll());
         System.out.println("minHeap = " + minHeap);
+        System.out.println("get top = " + minHeap.poll());
+        System.out.println("minHeap = " + minHeap);
+        System.out.println("get top = " + minHeap.poll());
+        System.out.println("minHeap = " + minHeap);
+        System.out.println("get top = " + minHeap.poll());
+        System.out.println("minHeap = " + minHeap);
+        System.out.println("get top = " + minHeap.poll());
+        System.out.println("minHeap = " + minHeap);
+
+        com.hlee.scratch.queue.PriorityQueue minHeap2 = new com.hlee.scratch.queue.PriorityQueue();
+        minHeap2.add(100);
+        minHeap2.add(1);
+        minHeap2.add(9);
+        minHeap2.add(12);
+        minHeap2.add(5);
+
+        System.out.println("minHeap2 = " + minHeap2);
+        System.out.println("get top = " + minHeap2.poll());
+        System.out.println("minHeap2 = " + minHeap2);
+        System.out.println("get top = " + minHeap2.poll());
+        System.out.println("minHeap2 = " + minHeap2);
+        System.out.println("get top = " + minHeap2.poll());
+        System.out.println("minHeap2 = " + minHeap2);
+        System.out.println("get top = " + minHeap2.poll());
+        System.out.println("minHeap2 = " + minHeap2);
+        System.out.println("get top = " + minHeap2.poll());
+        System.out.println("minHeap2 = " + minHeap2);
+
 
         int[][] times = {
                 {1, 2, 9},
@@ -91,8 +119,8 @@ public class NetworkDelayTime {
             adjList.add(new ArrayList<>());
         }
 
-//        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // vertex value is integer
-        com.hlee.scratch.queue.PriorityQueue minHeap = new com.hlee.scratch.queue.PriorityQueue();
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // vertex value is integer
+//        com.hlee.scratch.queue.PriorityQueue minHeap = new com.hlee.scratch.queue.PriorityQueue();
         minHeap.add(k - 1); //
 
         // populate adjacency list from the data in times[][]
@@ -107,9 +135,9 @@ public class NetworkDelayTime {
         // below is just printing logic
         System.out.println("Adjacency list");
         AtomicInteger index = new AtomicInteger(0);
-        adjList.forEach(integers -> {
+        adjList.forEach(neighbors -> {
             System.out.print("vertex index " + index + ": ");
-            integers.forEach(ints -> System.out.print(Arrays.deepToString(ints) + ", "));
+            neighbors.forEach(targetAndWeight -> System.out.print(Arrays.deepToString(targetAndWeight) + ", "));
             System.out.println();
             index.addAndGet(1);
         });
@@ -117,13 +145,14 @@ public class NetworkDelayTime {
 
         while (!minHeap.isEmpty()) {
             int currentVertex = minHeap.poll();
-            List<Integer[]> adjacentTargetAndWeights = adjList.get(currentVertex);
-            for (int i = 0; i < adjacentTargetAndWeights.size(); i++) {
-                int adjacentVertex = adjacentTargetAndWeights.get(i)[0];
-                int weight = adjacentTargetAndWeights.get(i)[1];
-                if (distances[currentVertex] + weight < distances[adjacentVertex]) {
-                    distances[adjacentVertex] = distances[currentVertex] + weight;
-                    minHeap.add(adjacentVertex);
+            List<Integer[]> neighbors = adjList.get(currentVertex);
+            for (int i = 0; i < neighbors.size(); i++) {
+                Integer[] neighborTargetAndWeight = neighbors.get(i);
+                int targetVertex = neighborTargetAndWeight[0];
+                int weight = neighborTargetAndWeight[1];
+                if (distances[currentVertex] + weight < distances[targetVertex]) {
+                    distances[targetVertex] = distances[currentVertex] + weight;
+                    minHeap.add(targetVertex);
                 }
             }
         }

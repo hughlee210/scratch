@@ -95,4 +95,8 @@ public class PriorityQueue {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.heap.toString();
+    }
 }
