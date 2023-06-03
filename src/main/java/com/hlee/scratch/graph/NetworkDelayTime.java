@@ -62,11 +62,11 @@ public class NetworkDelayTime {
      * vertex index = vertex value - 1
      *
      * Adjacency list keeps neighboring vertex index and weight
-     * vertext index 0: [1, 9], [3, 2],
-     * vertext index 1: [4, 1],
-     * vertext index 2: [1, 3], [0, 5],
-     * vertext index 3: [1, 4], [4, 6],
-     * vertext index 4: [2, 7],
+     * vertex index 0: [1, 9], [3, 2],
+     * vertex index 1: [4, 1],
+     * vertex index 2: [1, 3], [0, 5],
+     * vertex index 3: [1, 4], [4, 6],
+     * vertex index 4: [2, 7],
      *
      * k = 1 (starting vertex)
      * n = 5 (number of vertex)
@@ -108,7 +108,7 @@ public class NetworkDelayTime {
         System.out.println("Adjacency list");
         AtomicInteger index = new AtomicInteger(0);
         adjList.forEach(integers -> {
-            System.out.print("vertext index " + index + ": ");
+            System.out.print("vertex index " + index + ": ");
             integers.forEach(ints -> System.out.print(Arrays.deepToString(ints) + ", "));
             System.out.println();
             index.addAndGet(1);
