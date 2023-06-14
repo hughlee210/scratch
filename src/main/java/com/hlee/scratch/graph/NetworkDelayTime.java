@@ -119,8 +119,8 @@ public class NetworkDelayTime {
             adjList.add(new ArrayList<>());
         }
 
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // vertex value is integer
-//        com.hlee.scratch.queue.PriorityQueue minHeap = new com.hlee.scratch.queue.PriorityQueue();
+//        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // vertex value is integer
+        com.hlee.scratch.queue.PriorityQueue minHeap = new com.hlee.scratch.queue.PriorityQueue();
         minHeap.add(k - 1); //
 
         // populate adjacency list from the data in times[][]
@@ -144,6 +144,7 @@ public class NetworkDelayTime {
         System.out.println("---------------------------");
 
         while (!minHeap.isEmpty()) {
+            System.out.println(minHeap);
             int currentVertex = minHeap.poll();
             List<Integer[]> neighbors = adjList.get(currentVertex);
             for (int i = 0; i < neighbors.size(); i++) {
@@ -153,6 +154,7 @@ public class NetworkDelayTime {
                 if (distances[currentVertex] + weight < distances[targetVertex]) {
                     distances[targetVertex] = distances[currentVertex] + weight;
                     minHeap.add(targetVertex);
+                    System.out.println("added " + targetVertex);
                 }
             }
         }

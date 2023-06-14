@@ -49,9 +49,27 @@ public class MaxProductSubArray {
         }
         int max = nums[0], min = nums[0], ans = nums[0];
         for (int i = 1; i < nums.length; i++) {
-            int temp = max; // store 'max' because before updating 'min' your 'max' will already be updated
+            // store current 'max' before updating max
+            // because before updating 'min' your 'max' will already be updated
+            int temp = max;
             max = Math.max(Math.max(max * nums[i], min * nums[i]), nums[i]);
             min = Math.min(Math.min(temp * nums[i], min * nums[i]), nums[i]);
+            if (max > ans) {
+                ans = max;
+            }
+        }
+        return ans;
+    }
+
+    static int maxProduct2(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int max = nums[0], min = nums[0], ans = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int temp = max; // store current max before updating max
+            max = Math.max(nums[i], Math.max(max * nums[i], min * nums[i]));
+            min = Math.min(nums[i], Math.min(temp * nums[i], min * nums[i]));
             if (max > ans) {
                 ans = max;
             }

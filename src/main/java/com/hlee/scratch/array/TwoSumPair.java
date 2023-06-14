@@ -122,13 +122,13 @@ public class TwoSumPair {
     static void findSumPair_usingHashMap(int[] arr, int sum) {
         if (arr == null || arr.length == 0)
             return;
-        Map<Integer, Integer> numMap = new HashMap<>();
+        Map<Integer, Integer> numsMap = new HashMap<>();
         for (int i = 0; i < arr.length; i++) {
             int numberToFind = sum - arr[i];
-            if (numMap.containsKey(numberToFind))
-                System.out.println("found a pair for sum: " + sum + " = " + (sum - arr[i]) + "(at index " + numMap.get(sum - arr[i]) + ") + " + arr[i] + "(at index " + i + ")");
+            if (numsMap.containsKey(numberToFind))
+                System.out.println("found a pair for sum: " + sum + " = " + (sum - arr[i]) + "(at index " + numsMap.get(sum - arr[i]) + ") + " + arr[i] + "(at index " + i + ")");
             else
-                numMap.put(arr[i], i);
+                numsMap.put(arr[i], i);
         }
     }
 

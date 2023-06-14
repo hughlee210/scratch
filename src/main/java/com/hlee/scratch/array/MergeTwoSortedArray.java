@@ -6,7 +6,7 @@ public class MergeTwoSortedArray {
 
     public static void main(String[] args) {
 
-        int[] arr1 = { 1, 3, 5, 7 };
+        int[] arr1 = { 1, 1, 3, 5, 7 };
         int[] arr2 = { 2, 4, 6, 8, 10, 12 };
 
         int[] mergedArr = mergeArrays_extraSpace(arr1, arr2);
@@ -21,7 +21,7 @@ public class MergeTwoSortedArray {
         /////////////////////////////////////////////////////////////////////
 
         int[] arr11 = { 1, 4, 5 };
-        int[] arr22 = { 2, 3, 60, 80, 90, 100, 200 };
+        int[] arr22 = { 2, 3, 60, 80, 90, 90, 90, 100, 2000 };
         mergedArr = mergeArrays_extraSpace(arr11, arr22);
         System.out.println("arr11 = " + Arrays.toString(arr11));
         System.out.println("arr22 = " + Arrays.toString(arr22));
@@ -47,7 +47,7 @@ public class MergeTwoSortedArray {
     }
 
     // time: O(1)
-    public static double findMedian(int[] arr) {
+    static double findMedian(int[] arr) {
         double median;
         int n = arr.length;
         if (n % 2 == 1) { // size = odd number
@@ -60,7 +60,7 @@ public class MergeTwoSortedArray {
 
     // time complexity: O(n1 + n2), space: O(n1 + n2)
     //
-    public static int[] mergeArrays_extraSpace(int[] arr1, int[] arr2) {
+    static int[] mergeArrays_extraSpace(int[] arr1, int[] arr2) {
 
         // assumption: arr1 and arr2 are not null
         int i = 0, j = 0, k = 0;
@@ -68,7 +68,7 @@ public class MergeTwoSortedArray {
 
         // traverse both arrays
         while (i < arr1.length && j < arr2.length) {
-            // if element of arr1 is smaller than elment of arr2, store arr1 element
+            // if element of arr1 is smaller than element of arr2, store arr1 element
             // otherwise arr2 element into result array
             if (arr1[i] < arr2[j])
                 arr3[k++] = arr1[i++];
@@ -88,6 +88,30 @@ public class MergeTwoSortedArray {
 
         return arr3;
     }
+
+    static int[] mergeArrays_extraSpace_ex(int[] arr1, int[]arr2) {
+        // assume arr1 and arr2 are not null
+        int i = 0, j = 0, k = 0;
+        int[] arr3 = new int[arr1.length + arr2.length];
+        // traverse both arrays
+        while (i < arr1.length && j < arr2.length) {
+            // if arr1 element is smaller than arr2 element, store arr1 element otherwise arr2 element into arr3
+            if (arr1[i] < arr2[j])
+                arr3[k++] = arr1[i++];
+            else
+                arr3[k++] = arr2[j++];
+        }
+        // store remaining elements of arr1/arr2 into result array
+        while (i < arr1.length) {
+            arr3[k++] = arr1[i++];
+        }
+        while (j < arr2.length) {
+            arr3[k++] = arr2[j++];
+        }
+        return arr3;
+    }
+
+
 
     // time complexity: O(n), space: O(1)
     static void mergeArrays_noSpace(int[] arr1, int[] arr2) {
@@ -111,5 +135,9 @@ public class MergeTwoSortedArray {
         while (j >= 0) {
             arr1[k--] = arr2[j--];
         }
+    }
+
+    static void mergeArrays_noSpace_ex(int[] arr1, int[] arr2) {
+
     }
 }
