@@ -11,12 +11,12 @@ public class MyRestApiService {
 
     public static void main(String[] args) {
 
-
         String urlString = "https://images-api.nasa.gov/search?q=clouds";
 
         MyRestApiService myService = new MyRestApiService();
         String result = myService.extractData(urlString);
         System.out.println("result: " + result);
+        System.out.println("------------------------------------------");
 
 //        String[] lang = {"Java", "Node", "Kotlin", "JavaScript"};
 //        Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -27,53 +27,9 @@ public class MyRestApiService {
 
     }
 
-    public void sendPostRequest() {
-        try {
-            URL url = new URL("https://reqres.in/api/users"); // REST api testing website: https://reqres.in/
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            // Set the Request Content-Type Header Parameter to send the request body in JSON format
-            conn.setRequestProperty("Content-Type", "application/json");
-            // set response format type to read the response in the desired format
-            conn.setRequestProperty("Accept", "application/json");
-            // to send request content to connection output stream, set doOutput property to true
-            conn.setDoOutput(true);
-
-            // create a JSON string and write to connection output stream
-            String jsonString = "{\"name\": \"Heonkoo\", \"job\": \"Software Engineer\"}";
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] content = jsonString.getBytes("utf-8");
-                os.write(content, 0, content.length);
-            }
-
-            // read the response from input stream
-//            try (BufferedReader br = new BufferedReader(
-//                    new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-//                StringBuilder response = new StringBuilder();
-//                String line;
-//                while ((line = br.readLine()) != null) {
-//                    response.append(line.trim());
-//                }
-//                System.out.println(response.toString());
-//            }
-
-            // if response is json, we can leverage json parser
-            JsonParser parser = new JsonParser();
-            JsonElement root = parser.parse(new InputStreamReader(conn.getInputStream()));
-            System.out.println("response:\n" + root);
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String json = gson.toJson(root);
-            System.out.println("response pretty printing:\n" + json);
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public String extractData(String urlString) {
         try {
+            System.out.println("Connecting to " + urlString);
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -122,6 +78,51 @@ public class MyRestApiService {
         }
     }
 
+    public void sendPostRequest() {
+        try {
+            String urlString = "https://reqres.in/api/users";
+            System.out.println("Sending POST request to " + urlString);
+            URL url = new URL(urlString); // REST api testing website: https://reqres.in/
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            // Set the Request Content-Type Header Parameter to send the request body in JSON format
+            conn.setRequestProperty("Content-Type", "application/json");
+            // set response format type to read the response in the desired format
+            conn.setRequestProperty("Accept", "application/json");
+            // to send request content to connection output stream, set doOutput property to true
+            conn.setDoOutput(true);
 
+            // create a JSON string and write to connection output stream
+            String jsonString = "{\"name\": \"Heonkoo\", \"job\": \"Software Engineer\"}";
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] content = jsonString.getBytes("utf-8");
+                os.write(content, 0, content.length);
+            }
+
+            // read the response from input stream
+//            try (BufferedReader br = new BufferedReader(
+//                    new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+//                StringBuilder response = new StringBuilder();
+//                String line;
+//                while ((line = br.readLine()) != null) {
+//                    response.append(line.trim());
+//                }
+//                System.out.println(response.toString());
+//            }
+
+            // if response is json, we can leverage json parser
+            JsonParser parser = new JsonParser();
+            JsonElement root = parser.parse(new InputStreamReader(conn.getInputStream()));
+            System.out.println("response:\n" + root);
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(root);
+            System.out.println("response pretty printing:\n" + json);
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
