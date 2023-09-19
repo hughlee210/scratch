@@ -1,9 +1,6 @@
 package com.hlee.scratch.rest;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +8,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public class MyRestApiServiceUsingHttpClient {
 
@@ -24,10 +22,16 @@ public class MyRestApiServiceUsingHttpClient {
         System.out.println("------------------------------------------");
 
         postmanEcho();
+        System.out.println("------------------------------------------");
 
+        postmanEchoPost();
+        System.out.println("------------------------------------------");
+
+        sendPostRequest();
+        System.out.println("------------------------------------------");
     }
 
-    public static void postmanEcho() throws IOException, InterruptedException {
+    static void postmanEcho() throws IOException, InterruptedException {
         System.out.println("***Sending GET request to postman");
         String urlString = "https://postman-echo.com/get?param1=value1&param2=value2";
         HttpRequest request = HttpRequest.newBuilder()
@@ -46,7 +50,31 @@ public class MyRestApiServiceUsingHttpClient {
         }
     }
 
-    public String extractData(String urlString) {
+    static void postmanEchoPost() throws IOException, InterruptedException {
+        // https://www.baeldung.com/java-httpclient-post
+        System.out.println("***Sending POST request to postman echo");
+        String urlString = "https://postman-echo.com/post?param1=value1&param2=value2";
+        String body = "{\n" +
+                "\t\"firstName\": \"John\",\n" +
+                "\t\"lastName\": \"Doe\",\n" +
+                "\t\"age\": 35\n" +
+                "}";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(urlString))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .header("X-header", "some value")
+                .build();
+        HttpResponse response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("response body: " + response.body());
+        System.out.println("response status code: " + response.statusCode());
+    }
+
+    String extractData(String urlString) {
         System.out.println("Connecting to " + urlString);
 
         HttpRequest request;
@@ -99,6 +127,31 @@ public class MyRestApiServiceUsingHttpClient {
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static void sendPostRequest() throws IOException, InterruptedException {
+        String urlString = "https://reqres.in/api/users";
+        System.out.println("***Sending POST request to " + urlString);
+
+        String jsonString = "{\"name\": \"Heonkoo\", \"job\": \"Software Engineer\"}";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(urlString))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonString, StandardCharsets.UTF_8))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .build();
+        HttpResponse response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        //System.out.println("response body: " + response.body());
+        System.out.println("response status code: " + response.statusCode());
+
+        JsonParser parser = new JsonParser();
+        JsonElement root = parser.parse(response.body().toString());
+        System.out.println("response:\n" + root);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println("response pretty printing:\n" + gson.toJson(root));
     }
 
 }

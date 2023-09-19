@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "layerId": 5,
+      "layerName": "Pharmaceutical Entities",
+      "attributes": {
+        "OBJECTID": "35",
+        "FACILITYTYPE": "Pharmacy",
+        "FACILITYSUBTYPE": "24 Hr Pharmacy",
+        "COMMERCIALNAME_E": "SADD MAARAB PHARMACY"
+      },
+      "geometryType": "esriGeometryPoint"
+    },
+    {
+      "layerId": 5,
+      "layerName": "Pharmaceutical Entities",
+      "attributes": {
+        "OBJECTID": "1",
+        "FACILITYTYPE": "Pharmacy",
+        "FACILITYSUBTYPE": "24 Hr Pharmacy",
+        "COMMERCIALNAME_E": "GAYATHY HOSPITAL  PHARMACY"
+      },
+      "geometryType": "esriGeometryPoint"
+    },
+    {
+      "layerId": 5,
+      "layerName": "Pharmaceutical Entities",
+      "attributes": {
+        "OBJECTID": "255",
+        "FACILITYTYPE": "Pharmacy",
+        "FACILITYSUBTYPE": "24 Hr Pharmacy",
+        "COMMERCIALNAME_E": "AL DEWAN PHARMACY"
+      },
+      "geometryType": "esriGeometryPoint"
+    }
+  ]
+}

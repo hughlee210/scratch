@@ -7,19 +7,19 @@ public class MaxOccurringString {
 
     public static void main(String[] args) {
         String str = "iamaboyiamboy";
-        String maxOccurringString = findMaxOccurringString(str, 3);
+        String maxOccurringString = findMaxOccurringSubstring(str, 3);
         System.out.printf("input string: %s\n", str);
         System.out.printf("output      : %s\n", maxOccurringString);
     }
 
     /**
-     * function to find the maximum occurring character in
-     * an input string which is lexicographically first
+     * function to find the most occurring substring of length k
+     * if more than one, take the one appearing lexicographically first
      *
      * Time Complexity: O(N*(K + log K))
      * Auxiliary Space: O(N * K)
      */
-    static String findMaxOccurringString(String str, int k) {
+    static String findMaxOccurringSubstring(String str, int k) {
         String currentString = "";
         int i = 0, j = 0, n = str.length();
         // to store all substring and there number of occurrences
