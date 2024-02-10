@@ -2,9 +2,10 @@ package com.hlee.scratch.twodimensionarray;
 
 public class WallsAndGates {
     /**
-     * Given a 2D array containing -1's (walls), 0's (gates) and INF's (empty room). Fill each empty room with
-     * the number of steps to the nearest gate.
-     * If it is impossible to reach a gate, leave INF as the value. INF is equal to max integer value.
+     * Given a 2D array containing -1's (walls), 0's (gates) and INF's (empty room).
+     * Fill each empty room with the number of steps to the nearest gate.
+     * If it is impossible to reach a gate, leave INF as the value.
+     * INF is equal to max integer value.
      *
      * {
      *     {INF, -1,   0,  INF},
@@ -37,10 +38,10 @@ public class WallsAndGates {
 
     // fill INF (empty room) with minimum steps to Gate
     int[][] wallsAndGates(int[][] matrix) {
-        for (int row = 0; row < matrix.length; row++) {
+        for (int row = 0; row < matrix.length; row++) {     // T: O(N)
             for (int col = 0; col < matrix[0].length; col++) {
                 if (matrix[row][col] == GATE) {
-                    dfs(matrix, row, col, 0);
+                    dfs(matrix, row, col, 0); // S: O(N) stack
                 }
             }
         }
@@ -49,7 +50,8 @@ public class WallsAndGates {
 
     void dfs(int[][] matrix, int row, int col, int currentStep) {
         // base case
-        if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length || currentStep > matrix[row][col]) {
+        if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length ||
+                currentStep > matrix[row][col]) {
             return;
         }
 

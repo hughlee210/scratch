@@ -22,11 +22,12 @@ public class NumberOfIslands {
      *    lands are only connected horizontally or vertically
      *    0: water, 1: land
      *
-     *    logic: search sequentially from top to bottom, left to right
-     *    increment counter when value is 1 (land)
-     *    from that position do dfs/bfs for adjacent lands (value: 1)
-     *    flip their values to 0 so that connected lands are not counted again
-     *    during next sequential search
+     *    logic:
+     *    1. search sequentially from top to bottom, left to right
+     *      increment counter when value is 1 (land)
+     *    2. from that position do BFS/DFS for adjacent lands (value: 1)
+     *      flip their values to 0 so that connected lands are not counted again
+     *      during next sequential search
      */
 
     public static void main(String[] args) {
@@ -38,9 +39,17 @@ public class NumberOfIslands {
         };
         print(inputMatrix);
 
-        NumberOfIslands theObj = new NumberOfIslands();
-        int numberOfIslands = theObj.getNumberOfIslands(inputMatrix);
-        System.out.printf("number of islands: %s%n", numberOfIslands);
+        int islandCount = getNumberOfIslandsBFS(inputMatrix);
+        System.out.println("Number of islands (BFS) = " + islandCount);
+
+        int[][] inputMatrix2 = {
+                {1, 1, 1, 1, 0},
+                {1, 1, 0, 1, 0},
+                {1, 1, 0, 0, 1},
+                {0, 0, 0, 1, 1},
+        };
+        islandCount = getNumberOfIslandsDFS(inputMatrix2);
+        System.out.println("Number of islands (DFS) = " + islandCount);
     }
 
     /**
@@ -50,46 +59,83 @@ public class NumberOfIslands {
      * so it's O(2N) and drop constant => O(N)
      * Space complexity: O(queue size) = O(max(m, n))
      */
-    int getNumberOfIslands(int[][] matrix) {
+    static int getNumberOfIslandsBFS(int[][] matrix) {
         if (matrix == null || matrix.length == 0) {
             return 0;
         }
-
         int islandCount = 0;
         // do sequential search to check if there is a new island
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[0].length; col++) {
                 if (matrix[row][col] == 1) {
                     islandCount++;
-                    Queue<Integer[]> queue = new LinkedList<>();
-                    Integer[] startPos = {row, col};
-                    queue.add(startPos);
                     // flip to 0 because we don't want to add it to queue again while doing BFS
-                    // also, to avoid increment the counter while continuing sequential search
-                    matrix[row][col] = 0;
-                    while (queue.size() > 0) {
-                        Integer[] currentPos = queue.poll();
-                        int currentRow = currentPos[0];
-                        int currentCol = currentPos[1];
-                        // will add adjacent positions to the queue if it's land
-                        for (int i = 0; i < DIRECTIONS.length; i++) {
-                            int[] currentDir = DIRECTIONS[i];
-                            int nextRow = currentRow + currentDir[0];
-                            int nextCol = currentCol + currentDir[1];
-                            if (nextRow < 0 || nextRow >= matrix.length || nextCol < 0 || nextCol >= matrix[0].length) {
-                                continue;
-                            }
-                            if (matrix[nextRow][nextCol] == 1) {
-                                Integer[] nextPos = {nextRow, nextCol};
-                                queue.add(nextPos);
-                                matrix[nextRow][nextCol] = 0; // flip to 0
-                            }
-                        }
-                    }
+                    // also, to avoid increment the counter while continuing sequential search.
+                    // and add it to queue to check its adjacent cells and if it's land flip to 0
+                    bfs(matrix, row, col);
                 }
             }
         }
         return islandCount;
+    }
+
+    private static void bfs(int[][] matrix, int row, int col) {
+        if (matrix[row][col] == 1) {
+            matrix[row][col] = 0;
+            Integer[] startingPos = {row, col};
+            Queue<Integer[]> queue = new LinkedList<>();
+            queue.add(startingPos);
+            while (!queue.isEmpty()) {
+                Integer[] currPos = queue.poll();
+                int currRow = currPos[0];
+                int currCol = currPos[1];
+                // will add adjacent positions to the queue if it's land
+                for (int i = 0; i < DIRECTIONS.length; i++) {
+                    int[] currDir = DIRECTIONS[i];
+                    int nextRow = currRow + currDir[0];
+                    int nextCol = currCol + currDir[1];
+                    // bound check
+                    if (nextRow < 0 || nextRow >= matrix.length || nextCol < 0 || nextCol >= matrix[0].length) {
+                        continue;
+                    }
+                    if (matrix[nextRow][nextCol] == 1) {
+                        matrix[nextRow][nextCol] = 0; // flip to 0
+                        Integer[] nextPos = {nextRow, nextCol};
+                        queue.add(nextPos);
+                    }
+                }
+            }
+        }
+    }
+
+    static int getNumberOfIslandsDFS(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return 0;
+        }
+
+        int islandCount = 0;
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[0].length; col++) {
+                if (matrix[row][col] == 1) {
+                    islandCount++;
+                    dfs(matrix, row, col);
+                }
+            }
+        }
+        return islandCount;
+    }
+
+    private static void dfs(int[][] matrix, int row, int col) {
+        if (row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length) {
+            return;
+        }
+        if (matrix[row][col] == 1) {
+            matrix[row][col] = 0;
+            for (int i = 0; i < DIRECTIONS.length; i++) {
+                int[] currDir = DIRECTIONS[i];
+                dfs(matrix, row + currDir[0], col + currDir[1]);
+            }
+        }
     }
 
     static void print(int[][] matrix) {

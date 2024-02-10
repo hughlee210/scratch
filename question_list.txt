@@ -20,9 +20,12 @@
 20. 2D array: Number of islands
 21. 2D array: Rotting oranges
 22. 2D array: Walls and gates (fill empty cell with step number to gate)
-23. MinCostClimbingStairs: minimum cost of climbing stairs (Dynamic programming)
+23. TimeNeededToInformAllEmployee (Graph)
+24. Course scheduler (Graph)
+25. NetworkTimeDelay (Graph)
+26. MinCostClimbingStairs: minimum cost of climbing stairs (Dynamic programming)
     - top down (recursive), bottom up (iterative/tabulation)
-24. Knight probability (Dynamic programming)
+27. Knight probability (Dynamic programming)
 
 - coin change problem: minimum number of coins to make change
 - coin change problem: number of ways (combination) to make change

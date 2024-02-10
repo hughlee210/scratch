@@ -7,7 +7,7 @@ public class Interval {
     public static void main(String[] args) {
         //    For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8}}.
         //    The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}.
-        //    Similarly {5, 7} and {6, 8} should be merged and become {5, 8}
+        //    Similarly, {5, 7} and {6, 8} should be merged and become {5, 8}
 
         test1();
 
@@ -19,10 +19,12 @@ public class Interval {
     private static void test1() {
         List<Interval> list = new ArrayList<>();
         list.add(new Interval(2, 4));
+        list.add(new Interval(1, 7));
         list.add(new Interval(1, 3));
         list.add(new Interval(5, 7));
         list.add(new Interval(6, 8));
         list.add(new Interval(1, 3));
+        list.add(new Interval(1, 2));
         list.add(new Interval(9, 12));
         list.add(new Interval(10, 15));
         System.out.println("original list: " + list);
@@ -30,7 +32,7 @@ public class Interval {
         List<Interval> result = merge(list);
         System.out.println("result list: " + result);
 
-        mergeIntervals_improvedSpace(list.toArray(new Interval[0]));
+        mergeIntervals_inPlace(list.toArray(new Interval[0]));
         System.out.println("===================================");
     }
 
@@ -44,7 +46,7 @@ public class Interval {
         List<Interval> result = merge(list);
         System.out.println("result list: " + result);
 
-        mergeIntervals_improvedSpace(list.toArray(new Interval[0]));
+        mergeIntervals_inPlace(list.toArray(new Interval[0]));
         System.out.println("===================================");
     }
 
@@ -57,7 +59,7 @@ public class Interval {
         List<Interval> result = merge(list);
         System.out.println("result list: " + result);
 
-        mergeIntervals_improvedSpace(list.toArray(new Interval[0]));
+        mergeIntervals_inPlace(list.toArray(new Interval[0]));
         System.out.println("===================================");
     }
 
@@ -66,7 +68,7 @@ public class Interval {
      * Space complexity: O(N)
      */
     static List<Interval> merge(List<Interval> intervals) {
-        if (intervals == null || intervals.size() == 0)
+        if (intervals == null || intervals.isEmpty())
             return Collections.emptyList();
         // Time complexity: O(NlogN)
         intervals.sort((o1, o2) -> o1.start - o2.start);
@@ -94,7 +96,7 @@ public class Interval {
      * Time complexity: O(nlogn) for sorting
      * Space complexity: O(1)
      */
-    static void mergeIntervals_improvedSpace(Interval[] intervals) {
+    static void mergeIntervals_inPlace(Interval[] intervals) {
         if (intervals == null || intervals.length == 0) {
             return;
         }
@@ -114,6 +116,7 @@ public class Interval {
             }
         }
 
+        System.out.print("Improved version: ");
         for (int i = 0; i < intervals.length; i++) {
             if (i <= prevIndex) {
                 System.out.print(intervals[i] + ", ");
@@ -121,10 +124,18 @@ public class Interval {
                     System.out.println();
                 }
             } else {
-                intervals[i] = null;
+                // nullify the elements after last merged element
+                // intervals[i] = null;
+                System.out.println("***** i (" + i + ") > prevIndex (" + prevIndex + ")");
             }
         }
-        System.out.println("Merged intervals: " + Arrays.deepToString(intervals));
+        System.out.println("Merged intervals          : " + Arrays.deepToString(intervals));
+
+        // nullify the elements after merged elements
+        for (int i = prevIndex + 1; i < intervals.length; i++) {
+            intervals[i] = null;
+        }
+        System.out.println("Merged intervals with null: " + Arrays.deepToString(intervals));
     }
 
     int start;

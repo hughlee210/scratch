@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Dijkstra's shortest path
  *
  */
-public class NetworkDelayTime {
+public class NetworkTimeDelay {
 
     public static void main(String[] args) {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
@@ -31,6 +30,7 @@ public class NetworkDelayTime {
         System.out.println("minHeap = " + minHeap);
         System.out.println("get top = " + minHeap.poll());
         System.out.println("minHeap = " + minHeap);
+        System.out.println("===========================================");
 
         com.hlee.scratch.queue.PriorityQueue minHeap2 = new com.hlee.scratch.queue.PriorityQueue();
         minHeap2.add(100);
@@ -50,7 +50,7 @@ public class NetworkDelayTime {
         System.out.println("minHeap2 = " + minHeap2);
         System.out.println("get top = " + minHeap2.poll());
         System.out.println("minHeap2 = " + minHeap2);
-
+        System.out.println("===========================================");
 
         int[][] times = {
                 {1, 2, 9},
@@ -69,8 +69,8 @@ public class NetworkDelayTime {
         }
         System.out.println("---------------------------");
 
-        networkDelayTime(times, 5, 1);
-
+        int timeTakenToSendSignalToAllNodes = networkDelayTime(times, 5, 1);
+        System.out.println("time taken to send signal to all nodes = " + timeTakenToSendSignalToAllNodes);
     }
 
     /**
@@ -108,8 +108,11 @@ public class NetworkDelayTime {
      *     Inf
      * }
      *
+     * Send a signal from node k, return how long it takes for all nodes
+     * to receive the signal. Return -1 if it's impossible.
+     *
+     * note: Dijkstra's algorithm does not work for negative weight nor negative cycle
      */
-
     static int networkDelayTime(int[][] times, int n, int k) {
         int[] distances = new int[n]; // to store shortest distances
         Arrays.fill(distances, Integer.MAX_VALUE);
@@ -129,23 +132,13 @@ public class NetworkDelayTime {
             int target = times[i][1];
             int weight = times[i][2];
             Integer[] targetAndWeight = {target - 1, weight};
-            adjList.get(source - 1).add(targetAndWeight);
+            adjList.get(source - 1).add(targetAndWeight); // adjList is index 0 based
         }
-
-        // below is just printing logic
-        System.out.println("Adjacency list");
-        AtomicInteger index = new AtomicInteger(0);
-        adjList.forEach(neighbors -> {
-            System.out.print("vertex index " + index + ": ");
-            neighbors.forEach(targetAndWeight -> System.out.print(Arrays.deepToString(targetAndWeight) + ", "));
-            System.out.println();
-            index.addAndGet(1);
-        });
-        System.out.println("---------------------------");
 
         while (!minHeap.isEmpty()) {
             System.out.println(minHeap);
             int currentVertex = minHeap.poll();
+            System.out.println("removed from minHeap: " + currentVertex);
             List<Integer[]> neighbors = adjList.get(currentVertex);
             for (int i = 0; i < neighbors.size(); i++) {
                 Integer[] neighborTargetAndWeight = neighbors.get(i);
@@ -162,5 +155,20 @@ public class NetworkDelayTime {
         System.out.println("distances: " + Arrays.toString(distances));
         int maxDistance = Arrays.stream(distances).max().getAsInt();
         return maxDistance == Integer.MAX_VALUE ? -1 : maxDistance;
+    }
+
+    static void printAdjList(List<List<Integer[]>> adjList) {
+        // below is just printing logic
+        System.out.println("Adjacency list");
+        for (int i = 0; i < adjList.size(); i++) {
+            List<Integer[]> neighbors = adjList.get(i); // list of [taret_index, weight]
+            System.out.print("vertex index " + i + ": ");
+            for (int j = 0; j < neighbors.size(); j++) {
+                Integer[] targetAndWeight = neighbors.get(j);
+                System.out.print(Arrays.deepToString(targetAndWeight) + ",");
+            }
+            System.out.println();
+        }
+        System.out.println("-----end of printing Adjacency list");
     }
 }

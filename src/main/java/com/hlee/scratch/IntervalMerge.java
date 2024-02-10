@@ -7,7 +7,7 @@ public class IntervalMerge {
     public static void main(String[] args) {
         //    For example, let the given set of intervals be {{1,3}, {2,4}, {5,7}, {6,8}}.
         //    The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}.
-        //    Similarly {5, 7} and {6, 8} should be merged and become {5, 8}
+        //    Similarly, {5, 7} and {6, 8} should be merged and become {5, 8}
 
         test2();
 
@@ -21,8 +21,10 @@ public class IntervalMerge {
                 {1, 7},
                 {8, 12},
         };
-        System.out.println("original list: " + Arrays.deepToString(intervals));
-        mergeIntervals_improvedSpace(intervals);
+        System.out.println("before merge: " + Arrays.deepToString(intervals));
+        mergeIntervals_inPlace(intervals);
+        System.out.println("after merge : " + Arrays.deepToString(intervals));
+
     }
 
     static void testMerge() {
@@ -69,7 +71,7 @@ public class IntervalMerge {
      * Time complexity: O(nlogn) for sorting
      * Space complexity: O(1)
      */
-    static void mergeIntervals_improvedSpace(int[][] intervals) {
+    static void mergeIntervals_inPlace(int[][] intervals) {
         if (intervals == null || intervals.length == 0)
             return;
         Arrays.sort(intervals, (o1, o2) -> o1[0] - o2[0]);
@@ -88,17 +90,11 @@ public class IntervalMerge {
             }
         }
 
-        for (int i = 0; i < intervals.length; i++) {
-            if (i <= prevIndex) {
-                System.out.print(Arrays.toString(intervals[i]) + ", ");
-                if (i == prevIndex) {
-                    System.out.println();
-                }
-            } else {
-                intervals[i] = null;
-            }
+        // nullify the elements after the last merged element
+        for (int i = prevIndex + 1; i < intervals.length; i++) {
+            intervals[i] = null;
         }
-        System.out.println("Merged intervals: " + Arrays.deepToString(intervals));
+        System.out.println("Merged      : " + Arrays.deepToString(intervals));
     }
 
 }

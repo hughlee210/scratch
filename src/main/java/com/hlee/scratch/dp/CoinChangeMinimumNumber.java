@@ -80,17 +80,13 @@ public class CoinChangeMinimumNumber {
     }
 
     private static final int MAX_AMOUNT = 10000;
-    static int counter = 0;
 
     static int coinChange_bruteForce(int[] coins, int amount) {
-        counter = 0;
         int minCoins = minCoins(coins, amount);
         int result = minCoins < Integer.MAX_VALUE ? minCoins : -1;
 
         System.out.printf("- brute force: coins: %s, amount: %d, min number of coins = %d\n",
                 Arrays.toString(coins), amount, result);
-        System.out.println("call count: " + counter);
-
         return result;
     }
 
@@ -100,13 +96,14 @@ public class CoinChangeMinimumNumber {
      *
      * If 'amount' == 0, then 0 coins required.
      * If 'amount' > 0,
-     *      minCoins(coins[0..m-1], amount) = min {1 + minCoins(amount - coins[i]}
-     *                                          where i varies from 0 to m-1
+     *      minCoins(coins[0..n-1], amount) = min {1 + minCoins(coins, amount - coins[i]}
+     *                                          where i varies from 0 to n-1
      *                                          and coins[i] <= amount
      *
-     * Time complexity: O(n^a), where 'n' is the length of the input array 'coins'
+     * Time complexity: O(a^n), where 'n' is the length of the input array 'coins' = number of denominations
      *                  and 'a' is the input amount.
-     *          - O(n^a), each recursive call, we have up to 'n' choices and a depth of 'a'
+     *          - O(a^n), each recursive call, we have up to 'n' choices and a depth of 'a'
+     *                    each problem can be divided into N denominations
      * Space complexity: O(a) where 'a' is the input amount.
      *                  recursive call stack memory for the depth 'a' of tree
      */
@@ -114,13 +111,13 @@ public class CoinChangeMinimumNumber {
         if (amount == 0) { // base case: 0 coins needed to make amount 0
             return 0;
         }
-        int minCoins = Integer.MAX_VALUE;
+        int minCoins = Integer.MAX_VALUE; // min number of coins to make change
         for (int i = 0; i < coins.length; i++) {
             // try every coin that is smaller than or equal to 'amount'
             if (coins[i] <= amount) {
                 int subResult = minCoins(coins, amount - coins[i]); // amount - every coin
-                if (subResult != Integer.MAX_VALUE && (1 + subResult) < minCoins) {
-                    minCoins = subResult + 1;
+                if (subResult != Integer.MAX_VALUE) {
+                    minCoins = Math.min(minCoins, subResult + 1); // subResult + 1 select
                 }
             }
         }
@@ -128,14 +125,12 @@ public class CoinChangeMinimumNumber {
     }
 
     private static int coinChange_dp(int[] coins, int amount) {
-        int[] memo = new int[amount + 1];
+        int[] memo = new int[amount + 1]; // size
         int minCoins = minCoinsDP(coins, amount, memo);
         int result = minCoins < Integer.MAX_VALUE ? minCoins : -1;
 
         System.out.printf("- Using DP   : coins: %s, amount: %d, min number of coins = %d\n",
                 Arrays.toString(coins), amount, result);
-        System.out.println("call count: " + counter);
-
         return result;
     }
 
@@ -148,7 +143,7 @@ public class CoinChangeMinimumNumber {
      *                   recursive call stack memory
      */
     static int minCoinsDP(int[] coins, int amount, int[] memo) {
-        if (amount == 0) {
+        if (amount == 0) { // base case: 0 coins needed to make amount 0
             return 0;
         }
         if (memo[amount] != 0) {
@@ -158,8 +153,8 @@ public class CoinChangeMinimumNumber {
         for (int i = 0; i < coins.length; i++) {
             if (coins[i] <= amount) {
                 int subResult = minCoinsDP(coins, amount - coins[i], memo);
-                if (subResult != Integer.MAX_VALUE && 1 + subResult < minCoins) {
-                    minCoins = subResult + 1;
+                if (subResult != Integer.MAX_VALUE) {
+                    minCoins = Math.min(minCoins, subResult + 1); // subResult + 1 select of coins[i]
                     memo[amount] = minCoins;
                 }
             }
@@ -199,9 +194,7 @@ public class CoinChangeMinimumNumber {
     }
 
     static void testMinCoins_greedy(int[] coins, int amount) {
-        counter = 0;
         int minCoins = findMinCoins_greedy(coins, amount);
         System.out.printf("- Using greedy   : coins: %s, amount: %d, min number of coins = %d\n", Arrays.toString(coins), amount, minCoins);
-        System.out.println("call count: " + counter);
     }
 }

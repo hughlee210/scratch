@@ -6,5 +6,6 @@
 .gitignore
 .metadata/
 .idea
+.DS_Store
 *.iml
 !/src/main/java/com/hlee/scratch/BinaryTree.java

@@ -20,15 +20,13 @@ public class RottingOranges {
      *     {0, 1, 0, 0, 1}
      * }
      *
-     *
+     * below case returns -1
      * {
      *     {2, 0, 1, 0, 0},
      *     {1, 1, 0, 0, 2},
      *     {0, 1, 1, 1, 1},
      *     {0, 1, 0, 0, 1}
      * }
-     *
-     *
      */
 
     public static void main(String[] args) {
@@ -63,20 +61,23 @@ public class RottingOranges {
     static int FRESH = 1;
     static int EMPTY = 0;
 
+    /*
+    // search sequentially from top to bottom, left to right
+    // - count fresh oranges
+    // - put rotten oranges positions into queue
+    // BFS:
+    // - use queue size to track minutes
+    // - process rotting oranges
+    //   - rot adjacent fresh oranges
+    //   - push into queue
+    //   - decrement fresh orange count
+        T: O(N)
+        S: O(N) queue size can be O(n) when all oranges are rotten
+     */
     int getMinutesToRotOranges(int[][] matrix) {
-        // sequential order:
-        // - count fresh oranges
-        // - put rotten oranges into queue
-        // BFS:
-        // - use queue size to track minutes
-        // - process rotting oranges
-        //   - rot adjacent fresh oranges
-        //   - push into queue
-        //   - decrement fresh orange count
-
         int freshOranges = 0;
         Queue<Integer[]> queue = new LinkedList<>();
-        for (int row = 0; row < matrix.length; row++) {
+        for (int row = 0; row < matrix.length; row++) {     // O(N)
             for (int col = 0; col < matrix[0].length; col++) {
                 // count fresh oranges
                 if (matrix[row][col] == FRESH) {
@@ -91,13 +92,13 @@ public class RottingOranges {
         }
 
         // now we have initial rotten oranges in the queue
-        // record the current queue size
+        // record the current queue size to track minutes
         // when each queue element is processed, the queue size will be decremented
         // when the queue size become 0, that means one level for the rotten oranges
         // is processed.
         int currentQueueSize = queue.size();
         int minutes = 0;
-        while (queue.size() > 0) {
+        while (!queue.isEmpty()) {      // O(N)
             if (currentQueueSize == 0) {
                 // 0 means adjacent fresh oranges (one level) got rotten
                 minutes++;
@@ -127,5 +128,4 @@ public class RottingOranges {
         }
         return freshOranges > 0 ? -1 : minutes;
     }
-
 }

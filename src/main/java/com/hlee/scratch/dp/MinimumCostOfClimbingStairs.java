@@ -6,6 +6,19 @@ public class MinimumCostOfClimbingStairs {
 
     public static void main(String[] args) {
 
+        int[] costs = new int[]{20, 15, 30, 5};
+        int minCost = minCostClimbingStairs(costs);
+        System.out.println("costs = " + Arrays.toString(costs));
+        System.out.println("top-down recursive solution: minCost = " + minCost);
+
+        minCost = minCostClimbingStairsDP(costs);
+        System.out.println("top-down recursive solution with DP memoization: minCost = " + minCost);
+
+        minCost = minCostClimbingStairsDPIterative(costs);
+        System.out.println("bottom-up iterative solution with DP memoization: minCost = " + minCost);
+
+        minCost = minCostClimbingStairsDPIterativeOptimal(costs);
+        System.out.println("bottom-up iterative solution with DP memoization optimal: minCost = " + minCost);
     }
 
     /**
@@ -24,18 +37,18 @@ public class MinimumCostOfClimbingStairs {
      *      ____| 15
      *     | 20
      */
-    int minCostClimbingStairs(int[] costArr) {
+    static int minCostClimbingStairs(int[] costArr) {
         // TOP DOWN approach
         int n = costArr.length; // number of steps
-        // final stair's cost is 0, so the cost to reach to the top is minimum between
-        // cost to reach one step below and two steps below
+        // final stair's cost is 0, so the cost to reach the top is minimum of
+        // cost to reach one step below and cost for two steps below
         return Math.min(minCost(n - 1, costArr), minCost(n - 2, costArr));
     }
 
     // Time complexity: O(2^N)
     // Space complexity: O(N), not O(2^n) because call stack is used for single branch
     //      O(depth of recursion tree)
-    int minCost(int i, int[] costArr) {
+    static int minCost(int i, int[] costArr) {
         // i: step index
         if (i < 0) {
             return 0;
@@ -46,7 +59,7 @@ public class MinimumCostOfClimbingStairs {
         return costArr[i] + Math.min(minCost(i - 1, costArr), minCost(i - 2, costArr));
     }
 
-    int minCostClimbingStairsDP(int[] costArr) {
+    static int minCostClimbingStairsDP(int[] costArr) {
         int n = costArr.length; // number of steps
         int[] dp = new int[costArr.length];
         Arrays.fill(dp, -1);
@@ -55,7 +68,7 @@ public class MinimumCostOfClimbingStairs {
 
     // Time Complexity: O(N)
     // Space Complexity: O(N)
-    int minCostDP(int i, int[] costArr, int[] dp) {
+    static int minCostDP(int i, int[] costArr, int[] dp) {
         // i: step index = index of costArr
         if (i < 0) {
             return 0;
@@ -73,7 +86,7 @@ public class MinimumCostOfClimbingStairs {
     // bottom up approach (iterative / tabulation)
     // Time complexity: O(N)
     // Space complexity: O(N)
-    int minCostClimbingStairsDPIterative(int[] costArr) {
+    static int minCostClimbingStairsDPIterative(int[] costArr) {
         int n = costArr.length;
         int[] dp = new int[costArr.length];
         for (int i = 0; i < n; i++) {
@@ -87,7 +100,7 @@ public class MinimumCostOfClimbingStairs {
     }
 
     // bottom up approach (iterative / tabulation)
-    int minCostClimbingStairsDPIterativeOptimal(int[] cost) {
+    static int minCostClimbingStairsDPIterativeOptimal(int[] cost) {
         int n = cost.length;
         int[] dp = new int[cost.length];
         // optimized: space complexity is now O(1) from O(N)
