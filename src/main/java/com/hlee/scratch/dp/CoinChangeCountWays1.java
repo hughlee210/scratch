@@ -63,8 +63,6 @@ public class CoinChangeCountWays1 {
      *   N is the number of coins.
      */
     private static int countWays_bruteForce1(int[] coins, int i, int amount) {
-        //System.out.println("called countWays_bruteForce: coins " + Arrays.toString(coins) + ", coin index " + i + ", amount " + amount);
-        COUNT++;
         // base case for amount == 0, or amount < 0, or coin index == number of coin (there is no more coin)
         if (amount == 0) {
             return 1; // 1 way
@@ -73,10 +71,8 @@ public class CoinChangeCountWays1 {
             return 0; // no ways
         }
 
-        int result = countWays_bruteForce1(coins, i, amount - coins[i]) // option 1 (pick coin to use coin)
+        return countWays_bruteForce1(coins, i, amount - coins[i]) // option 1 (pick coin to use coin)
                 + countWays_bruteForce1(coins, i + 1, amount); // option 2 (discard coin to not use coin)
-        //System.out.println("===== Returning countWays_bruteForce: result = " + result);
-        return result;
     }
 
     static int COUNT = 0;
@@ -111,33 +107,33 @@ public class CoinChangeCountWays1 {
         return countWaysHelper_memo(coins, 0, amount, memo);
     }
 
-    private static int countWaysHelper_memo(int[] coins, int i, int remainingAmount, int[][] memo) {
+    private static int countWaysHelper_memo(int[] coins, int i, int amount, int[][] memo) {
         // Base cases
-        if (remainingAmount == 0) {
+        if (amount == 0) {
             return 1; // One way to make change (no remaining amount)
         }
         if (i == coins.length) { // i = current index of coins array
             return 0; // No more coins to consider
         }
         // Check if the result is already memoized
-        if (memo[i][remainingAmount] != -1) {
-            return memo[i][remainingAmount];
+        if (memo[i][amount] != -1) {
+            return memo[i][amount];
         }
 
         // Option 1: Use the current coin
         int waysWithCurrentCoin = 0;
-        if (coins[i] <= remainingAmount) {
-            waysWithCurrentCoin = countWaysHelper_memo(coins, i, remainingAmount - coins[i], memo);
+        if (coins[i] <= amount) {
+            waysWithCurrentCoin = countWaysHelper_memo(coins, i, amount - coins[i], memo);
         }
 
         // Option 2: Skip the current coin
-        int waysWithoutCurrentCoin = countWaysHelper_memo(coins, i + 1, remainingAmount, memo);
+        int waysWithoutCurrentCoin = countWaysHelper_memo(coins, i + 1, amount, memo);
 
         // Total ways by combining both options
         int totalWays = waysWithCurrentCoin + waysWithoutCurrentCoin;
 
         // Memoize the result
-        memo[i][remainingAmount] = totalWays;
+        memo[i][amount] = totalWays;
 
         return totalWays;
     }

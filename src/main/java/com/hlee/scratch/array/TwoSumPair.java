@@ -169,27 +169,6 @@ public class TwoSumPair {
     static List<int[]> findSumPair_optimal(int[] nums, int sum) {
         if (nums == null || nums.length == 0)
             return null;
-        List<int[]> pairs = new ArrayList<>();
-        Map<Integer, Integer> numsMap = new HashMap<>();
-        for (int p = 0; p < nums.length; p++) {
-            Integer currentMapVal = numsMap.get(nums[p]);
-            if (currentMapVal != null) {
-                // if map contains current number as a key, its map value is the index of the number
-                // used to calculate the key number (= number to find = sum - the other number)
-                pairs.add(new int[]{currentMapVal, p});
-            } else {
-                // keeps numberToFind as a key and the index of the number used to
-                // calculate numberToFind as a value
-                int numberToFind = sum - nums[p];
-                numsMap.put(numberToFind, p);
-            }
-        }
-        return pairs;
-    }
-
-    static List<int[]> findSumPair_good(int[] nums, int sum) {
-        if (nums == null || nums.length == 0)
-            return null;
         List<int[]> resultPairs = new ArrayList<>();
         // use a map to store key-value pairs of numberToFind as a key and the index of the number
         // used to calculate the numberToFind.
@@ -209,4 +188,5 @@ public class TwoSumPair {
         }
         return resultPairs;
     }
+
 }

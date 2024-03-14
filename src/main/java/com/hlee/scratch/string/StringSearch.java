@@ -31,6 +31,8 @@ public class StringSearch {
         if (str == null || str.length() == 0 || subStr == null || subStr.length() == 0 || str.length() < subStr.length())
             return -1;
         int i = 0, j = 0;
+        int strLeng = str.length();
+        int subStrLeng = subStr.length();
         while (i < str.length() && j < subStr.length()) {
             if (str.charAt(i) == subStr.charAt(j)) {
                 i++;
@@ -39,6 +41,10 @@ public class StringSearch {
                 // set i and j to next starting index
                 i = i - j + 1;
                 j = 0;
+                System.out.println("str length = " + str.length() + ", i = " + i + ", subStr length = " + subStr.length());
+                if (strLeng - i < subStrLeng) {
+                    break;
+                }
             }
             count++;
         }

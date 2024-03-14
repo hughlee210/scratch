@@ -2,36 +2,47 @@ package com.hlee.scratch.dp;
 
 import java.util.Arrays;
 
-public class MinimumCoinChange {
+public class MinimumCoinChange1 {
 
     public static void main(String[] args) {
 
+        // 1st case
         int[] coins = {1, 2, 5};
         int amount = 11;
+
+        // 2nd case
+//        int[] coins = {2, 3, 5};
+//        int amount = 6;
+
         minCoins_bruteForce(coins, amount);
 
-        minCoins_withMemo(coins, amount);
+        minCoins_usingMemo(coins, amount); // doesn't work for 2nd case
+
+        minCoins_usingDPIterative(coins, amount);
     }
 
     static void minCoins_bruteForce(int[] coins, int amount) {
-        int minCoins = minCoins(coins, amount);
+        int minCoins = minCoinsHelper_bf(coins, amount);
         int result = minCoins == Integer.MAX_VALUE ? -1 : minCoins;
         System.out.printf("coins = %s, amount = %d\n", Arrays.toString(coins), amount);
         System.out.println("minCoins (brute force) = " + result);
+        System.out.println("============================================");
     }
 
     /**
-     * Time complexity: O(amount^N) each problem can be divided into N denominations
+     * Time complexity: O(amount^N) each recursive call, we have up to 'N' choices and a depth of 'a'
+     *                  each problem can be divided into N denominations (subproblems)
+     *                  O(tree_depth ^ number of branching)
      * Space complexity: depth of recursion tree = O(amount)
      */
-    static int minCoins(int[] coins, int amount) {
+    static int minCoinsHelper_bf(int[] coins, int amount) {
         if (amount == 0) { // base case: 0 coins needed to make amount 0
             return 0;
         }
         int minCoins = Integer.MAX_VALUE;
         for (int coin : coins) {
             if (coin <= amount) {
-                int subResult = minCoins(coins, amount - coin);
+                int subResult = minCoinsHelper_bf(coins, amount - coin);
                 if (subResult != Integer.MAX_VALUE) {
                     minCoins = Math.min(minCoins, subResult + 1); // subResult + 1 use of coin
                 }
@@ -40,13 +51,15 @@ public class MinimumCoinChange {
         return minCoins;
     }
 
-    static void minCoins_withMemo(int[] coins, int amount) {
+    static void minCoins_usingMemo(int[] coins, int amount) {
+        //int[] memo = new int[amount + 1];
         int[] memo = new int[amount + 1];
         Arrays.fill(memo, -1);
-        int minCoins = minCoinsDPMemo(coins, amount, memo);
+        int minCoins = minCoinsDPMemoHelper(coins, amount, memo);
         int result = minCoins == Integer.MAX_VALUE ? -1 : minCoins;
         System.out.printf("coins = %s, amount = %d\n", Arrays.toString(coins), amount);
         System.out.println("minCoins (with memoization) = " + result);
+        System.out.println("============================================");
     }
 
     /**
@@ -57,7 +70,7 @@ public class MinimumCoinChange {
      * Space complexity: O(a) where 'a' is the input amount.
      *                   recursive call stack memory
      */
-    static int minCoinsDPMemo(int[] coins, int amount, int[] memo) {
+    static int minCoinsDPMemoHelper(int[] coins, int amount, int[] memo) {
         if (amount == 0) {
             return 0;
         }
@@ -67,7 +80,7 @@ public class MinimumCoinChange {
         int minCoins = Integer.MAX_VALUE;
         for (int coin : coins) {
             if (coin <= amount) {
-                int subResult = minCoinsDPMemo(coins, amount - coin, memo);
+                int subResult = minCoinsDPMemoHelper(coins, amount - coin, memo);
                 if (subResult != Integer.MAX_VALUE) {
                     minCoins = Math.min(minCoins, subResult + 1); // + 1 use of coin
                 }
@@ -76,6 +89,13 @@ public class MinimumCoinChange {
         // memoize the result before returning
         memo[amount] = minCoins;
         return minCoins;
+    }
+
+    private static void minCoins_usingDPIterative(int[] coins, int amount) {
+        int minCoins = minCoinsDPIterative(coins, amount);
+        System.out.printf("coins = %s, amount = %d\n", Arrays.toString(coins), amount);
+        System.out.println("minCoins (with DP iterative) = " + minCoins);
+        System.out.println("============================================");
     }
 
     /**
@@ -100,12 +120,20 @@ public class MinimumCoinChange {
      * The space complexity is O(amount), as we use a 1D array (dp) to store
      * the minimum number of coins needed for each amount up to the target amount.
      * The space required is proportional to the target amount.
+     *
+     *  coins = {2, 3, 5}
+     *  amount = 6
+     *
+     *   j (a)  0     1     2     3     4     5     6
+     * i (c) -------------------------------------------
+     *   2      0     M     M     M     M     M     M
+     *   3      0     0     0     0     0     0     0
+     *   5      0     0     0     0     0     0     0
      */
     static int minCoinsDPIterative(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
-        Arrays.fill(dp, Integer.MAX_VALUE);
-        dp[0] = 0;
-
+        Arrays.fill(dp, Integer.MAX_VALUE); // max_value can be replaced with (amount + 1)
+        dp[0] = 0; // 0 coin needed to make amount 0
         for (int coin : coins) {
             for (int i = coin; i <= amount; i++) {
                 if (dp[i - coin] != Integer.MAX_VALUE) {
@@ -113,6 +141,7 @@ public class MinimumCoinChange {
                 }
             }
         }
+        System.out.println(Arrays.toString(dp));
         return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
     }
 

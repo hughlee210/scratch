@@ -121,8 +121,8 @@ public class LinkedList<T> {
         Node<Integer> prev = null;
         Node<Integer> curr = head;
         while (curr != null) {
-            // will update current node's next pointer to point to previous node
-            // so we will need to store the next node otherwise we will lose the pointer to next node
+            // we will update current node's next pointer to point to previous node
+            // so, we will need to store the next node otherwise we will lose the pointer to next node
             Node<Integer> next = curr.next;
             curr.next = prev; // update next pointer
             // now advance prev and curr pointers
@@ -152,6 +152,7 @@ public class LinkedList<T> {
             currentNode.next = newList;
             newList = currentNode;
             currentNode = next;
+            currentPos++;
         }
         start.next = newList;
         tail.next = currentNode; // currentNode is at n+1 position
@@ -260,6 +261,13 @@ public class LinkedList<T> {
         return slow;
     }
 
+    /**
+     * null<-[1]<->[2]<->[3]-> null
+     *              |
+     *      null <-[4]<->[5]<->[6]-> null
+     *                    |
+     *            null <-[7]-> null
+     */
     Node flattenMultiLevelList(Node head) {
         if (head == null) {
             return null;

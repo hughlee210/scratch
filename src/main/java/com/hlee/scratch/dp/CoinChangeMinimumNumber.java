@@ -45,9 +45,9 @@ public class CoinChangeMinimumNumber {
      *         - Return -1
      * <p>
      * Brute force solution:
-     *  Time complexity: O(n^a), where 'n' is the length of the input array 'coins' and 'a' is the input amount.
+     *  Time complexity: O(n^a), where 'n' is the length of the input array 'coins' and 'a' is the target amount.
      *     - O(n^a), each recursive call, we have up to 'n' choices and a depth of 'a'
-     * Space complexity: O(a) where 'a' is the input amount. recursive call stack memory for the depth 'a' of tree
+     * Space complexity: O(a) where 'a' is the target amount. recursive call stack memory for the depth 'a' of tree
      * <p>
      * DP solution:
      * Time Complexity: O(N * amount) as for each denomination, we calculate the number of ways to form all the amounts
@@ -60,29 +60,38 @@ public class CoinChangeMinimumNumber {
         int[] coins = {1, 2, 5};
         int amount = 11;
 
-        coinChange_bruteForce(coins, amount);
+        minCoins_bruteForce(coins, amount);
 
-        coinChange_dp(coins, amount);
+        minCoins_memo(coins, amount);
 
         testMinCoins_greedy(coins, amount);
-
         System.out.println("====================================");
 
         int[] coins2 = {1, 5, 6, 9};
         int amount2 = 11;
 
-        coinChange_bruteForce(coins2, amount2);
+        minCoins_bruteForce(coins2, amount2);
 
-        coinChange_dp(coins2, amount2);
+        minCoins_memo(coins2, amount2);
 
         testMinCoins_greedy(coins2, amount2);
+        System.out.println("====================================");
 
+        int[] coins3 = {2, 3, 5};
+        int amount3 = 6;
+
+        minCoins_bruteForce(coins3, amount3);
+
+        minCoins_memo(coins3, amount3);
+
+        testMinCoins_greedy(coins3, amount3);
+        System.out.println("====================================");
     }
 
     private static final int MAX_AMOUNT = 10000;
 
-    static int coinChange_bruteForce(int[] coins, int amount) {
-        int minCoins = minCoins(coins, amount);
+    static int minCoins_bruteForce(int[] coins, int amount) {
+        int minCoins = minCoinsHelper_bf(coins, amount);
         int result = minCoins < Integer.MAX_VALUE ? minCoins : -1;
 
         System.out.printf("- brute force: coins: %s, amount: %d, min number of coins = %d\n",
@@ -107,15 +116,15 @@ public class CoinChangeMinimumNumber {
      * Space complexity: O(a) where 'a' is the input amount.
      *                  recursive call stack memory for the depth 'a' of tree
      */
-    static int minCoins(int[] coins, int amount) {
+    static int minCoinsHelper_bf(int[] coins, int amount) {
         if (amount == 0) { // base case: 0 coins needed to make amount 0
             return 0;
         }
         int minCoins = Integer.MAX_VALUE; // min number of coins to make change
-        for (int i = 0; i < coins.length; i++) {
+        for (int coin : coins) {
             // try every coin that is smaller than or equal to 'amount'
-            if (coins[i] <= amount) {
-                int subResult = minCoins(coins, amount - coins[i]); // amount - every coin
+            if (coin <= amount) {
+                int subResult = minCoinsHelper_bf(coins, amount - coin); // amount - every coin
                 if (subResult != Integer.MAX_VALUE) {
                     minCoins = Math.min(minCoins, subResult + 1); // subResult + 1 select
                 }
@@ -124,9 +133,10 @@ public class CoinChangeMinimumNumber {
         return minCoins;
     }
 
-    private static int coinChange_dp(int[] coins, int amount) {
+    private static int minCoins_memo(int[] coins, int amount) {
         int[] memo = new int[amount + 1]; // size
-        int minCoins = minCoinsDP(coins, amount, memo);
+        Arrays.fill(memo, -1);
+        int minCoins = minCoinsHelper_memo(coins, amount, memo);
         int result = minCoins < Integer.MAX_VALUE ? minCoins : -1;
 
         System.out.printf("- Using DP   : coins: %s, amount: %d, min number of coins = %d\n",
@@ -142,23 +152,24 @@ public class CoinChangeMinimumNumber {
      * Space complexity: O(a) where 'a' is the input amount.
      *                   recursive call stack memory
      */
-    static int minCoinsDP(int[] coins, int amount, int[] memo) {
+    static int minCoinsHelper_memo(int[] coins, int amount, int[] memo) {
         if (amount == 0) { // base case: 0 coins needed to make amount 0
             return 0;
         }
-        if (memo[amount] != 0) {
+        if (memo[amount] != -1) {
             return memo[amount];
         }
         int minCoins = Integer.MAX_VALUE;
-        for (int i = 0; i < coins.length; i++) {
-            if (coins[i] <= amount) {
-                int subResult = minCoinsDP(coins, amount - coins[i], memo);
+        for (int coin : coins) {
+            if (coin <= amount) {
+                int subResult = minCoinsHelper_memo(coins, amount - coin, memo);
                 if (subResult != Integer.MAX_VALUE) {
                     minCoins = Math.min(minCoins, subResult + 1); // subResult + 1 select of coins[i]
-                    memo[amount] = minCoins;
                 }
             }
         }
+        // memoize the result before returning
+        memo[amount] = minCoins;
         return minCoins;
     }
 
@@ -186,8 +197,9 @@ public class CoinChangeMinimumNumber {
             }
         }
         // print result
-        for (int i = 0; i < ans.size(); i++) {
-            System.out.print(" " + ans.get(i));
+        System.out.print("greedy: ");
+        for (Integer an : ans) {
+            System.out.print(" " + an);
         }
         System.out.println();
         return ans.size();

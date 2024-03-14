@@ -47,17 +47,29 @@ public class MergeTwoSortedArray {
         System.out.println("merged = " + Arrays.toString(mergedArr));
         System.out.println("---------------------------------------------------");
 
-
-
         // -1 to indicate unoccupied space
         int[] array1 = { 1, 18, 22, 100, 105, 1002, -1, -1, -1, -1, -1 };
         int[] array2 = { 16, 17, 19, 21, 1001 };
+        testInlineMerge(array1, array2);
 
+        int[] a1 = { 1, 18, -1, -1, -1, -1, -1 };
+        int[] a2 = { 16, 17, 19, 21, 1001 };
+        testInlineMerge(a1, a2);
+
+        int[] input1 = { 1, 18, 22, 100, 105, 1002, -1, -1 };
+        int[] input2 = { 16, 17 };
+        testInlineMerge(input1, input2);
+
+        int[] in1 = { 100, 105, 1002, 2000, -1, -1 };
+        int[] in2 = { 16, 17 };
+        testInlineMerge(in1, in2);
+    }
+
+    static void testInlineMerge(int[] array1, int[] array2) {
         System.out.println("--- Using merge inline...");
         System.out.println("array1 = " + Arrays.toString(array1));
-
-        mergeArrays_noSpace(array1, array2);
         System.out.println("array2 = " + Arrays.toString(array2));
+        mergeArrays_noSpace(array1, array2);
         System.out.println("merged = " + Arrays.toString(array1));
     }
 
@@ -76,9 +88,19 @@ public class MergeTwoSortedArray {
     // time complexity: O(n1 + n2), space: O(n1 + n2)
     //
     static int[] mergeArrays_extraSpace(int[] arr1, int[] arr2) {
-        // assumption: arr1 and arr2 are not null
-        int i = 0, j = 0, k = 0;
-        int[] arr3 = new int[arr1.length + arr2.length];
+        // handle empty array case
+        boolean arr1Empty = arr1 == null || arr1.length == 0;
+        boolean arr2Empty = arr2 == null || arr2.length == 0;
+        if (arr1Empty && arr2Empty) {
+            return new int[0]; // or return null;
+        } else if (arr1Empty) {
+            return arr2;
+        } else if (arr2Empty) {
+            return arr1;
+        }
+
+        int i = 0, j = 0, k = 0; // starting indexes
+        int[] arr3 = new int[arr1.length + arr2.length]; // extra space: O(n1 + n2)
         // traverse both arrays
         while (i < arr1.length && j < arr2.length) {
             // if element of arr1 is smaller than element of arr2, store arr1 element otherwise arr2 element into result array
@@ -146,7 +168,8 @@ public class MergeTwoSortedArray {
                 arr1[k--] = arr2[j--];
         }
 
-        // copy remaining elements of arr2 to arr1
+        // copy remaining elements of arr2 to arr1.
+        // no need to check for remaining elements of arr1 because they are already sorted and in place.
         while (j >= 0) {
             arr1[k--] = arr2[j--];
         }
@@ -173,4 +196,5 @@ public class MergeTwoSortedArray {
             arr1[k--] = arr2[j--];
         }
     }
+
 }
