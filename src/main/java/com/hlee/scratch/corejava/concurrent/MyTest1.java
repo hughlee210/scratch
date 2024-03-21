@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MyTest1 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         Runnable runnable = () -> {
             try {
@@ -19,6 +19,8 @@ public class MyTest1 {
 
         Thread thread = new Thread(runnable);
         thread.start();
+
+        thread.join();
 
     }
 

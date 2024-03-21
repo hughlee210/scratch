@@ -37,21 +37,23 @@ public class CourseScheduler {
                 {4, 5}
         };
         int n = 6;
-        boolean canFinish = canFinish(n, prerequisites);
-        System.out.println("can finish = " + canFinish);
+        boolean canFinish = canFinish_bf(n, prerequisites);
+        System.out.println("can finish (bf) = " + canFinish);
+
+        canFinish = canFinish(n, prerequisites);
+        System.out.println("can finish (optimal) = " + canFinish);
     }
 
     /**
      * Time complexity: O(P + N^3)
      * Space complexity: O(N^2) for adjList
      */
-    static boolean canFinish(int n, int[][] prerequisites) {
+    static boolean canFinish_bf(int n, int[][] prerequisites) {
         List<List<Integer>> adjList = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             adjList.add(new ArrayList<>());
         }
-        for (int i = 0; i < prerequisites.length; i++) { // T: O(p)
-            int[] pair = prerequisites[i];
+        for (int[] pair : prerequisites) { // T: O(p)
             adjList.get(pair[1]).add(pair[0]);
         }
         boolean[] seen = new boolean[n];
@@ -64,7 +66,7 @@ public class CourseScheduler {
             while (!queue.isEmpty()) { // n times
                 Integer current = queue.poll();
                 seen[current] = true;
-                if (current == v) {
+                if (current == v) { // means there is a cycle
                     return false;
                 }
                 List<Integer> adjacent = adjList.get(current);
@@ -77,5 +79,43 @@ public class CourseScheduler {
             }
         }
         return true;
+    }
+
+    static boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] indegree = new int[numCourses]; // space: O(n)
+        List<List<Integer>> adjList = new ArrayList<>(numCourses); // space: O(n)
+
+        for (int i = 0; i < numCourses; i++) { // time: O(n)
+            adjList.add(new ArrayList<>());
+        }
+
+        for (int[] prerequisite : prerequisites) { // time: O(p), space: O(p)
+            adjList.get(prerequisite[1]).add(prerequisite[0]);
+            indegree[prerequisite[0]]++;
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        // Push all the nodes with indegree zero in the queue.
+        for (int i = 0; i < numCourses; i++) { // time: O(n)
+            if (indegree[i] == 0) {
+                queue.add(i); // time: O(1)
+            }
+        }
+
+        int nodesVisited = 0;
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            nodesVisited++;
+
+            for (int neighbor : adjList.get(node)) {
+                // Delete the edge "node -> neighbor".
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        return nodesVisited == numCourses;
     }
 }

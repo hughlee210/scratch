@@ -9,18 +9,19 @@ public class IntervalMerge {
         //    The intervals {1,3} and {2,4} overlap with each other, so they should be merged and become {1, 4}.
         //    Similarly, {5, 7} and {6, 8} should be merged and become {5, 8}
 
-        test2();
-
         testMerge();
+
+        testMerge_inPlace();
     }
 
-    static void test2() {
+    static void testMerge_inPlace() {
         int[][] intervals = {
                 {3, 5},
                 {2, 5},
                 {1, 7},
                 {8, 12},
         };
+        System.out.println("*** Merge in place ****************************");
         System.out.println("before merge: " + Arrays.deepToString(intervals));
         mergeIntervals_inPlace(intervals);
         System.out.println("after merge : " + Arrays.deepToString(intervals));
@@ -34,7 +35,8 @@ public class IntervalMerge {
                 {8, 12}
         };
         List<int[]> result = mergeIntervals(intervals);
-        System.out.println("result = " + Arrays.deepToString(result.toArray()));
+        System.out.println("*** Merge ****************************");
+        System.out.println("result            = " + Arrays.deepToString(result.toArray()));
         System.out.println("input after merge = " + Arrays.deepToString(intervals));
     }
 
@@ -95,6 +97,37 @@ public class IntervalMerge {
             intervals[i] = null;
         }
         System.out.println("Merged      : " + Arrays.deepToString(intervals));
+    }
+
+    /**
+     * Time complexity: O(n) we iterate through the intervals once, and each interval
+     *      is considered and processed only once.
+     * Space complexity: O(1) or O(n) if we consider results array as extra space.
+     */
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int i = 0, n = intervals.length;
+        List<int[]> results = new ArrayList<>();
+
+        // case: no overlapping before merging intervals
+        while (i < n && intervals[i][1] < newInterval[0]) {
+            results.add(intervals[i]);
+            i++;
+        }
+        // case: overlapping and merging intervals
+        while (i < n && newInterval[1] >= intervals[i][0]) {
+            newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+            newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+            i++;
+        }
+        results.add(newInterval);
+
+        // case: add remaining intervals after merging newInterval
+        while (i < n) {
+            results.add(intervals[i]);
+            i++;
+        }
+        // convert list to array and return
+        return results.toArray(new int[results.size()][]);
     }
 
 }

@@ -29,7 +29,7 @@ public class TrapRainwater {
                 rightP++;
             }
             int currentWater = Math.min(maxLeft, maxRight) - heights[p];
-            if (currentWater >= 0) {
+            if (currentWater > 0) {
                 totalWater += currentWater;
             }
         }

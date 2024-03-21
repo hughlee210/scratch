@@ -2,38 +2,49 @@ package com.hlee.scratch.string;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class BackspaceStringCompare {
 
     public static void main(String[] args) {
         String s = "ab###x";
         String t = "att##x";
+        testBackspaceCompare_bf(s, t);
+        testBackspaceCompare_optimal(s, t);
+
+        s = "ab###bx#T";
+        t = "att##bxz##T";
+        testBackspaceCompare_bf(s, t);
+        testBackspaceCompare_optimal(s, t);
+
+        s = "##T";
+        t = "ab####T";
+        testBackspaceCompare_bf(s, t);
+        testBackspaceCompare_optimal(s, t);
+
+        s = "ab###bx#T";
+        t = "att##bxz##T";
+        testBackspaceCompare_bf(s, t);
+        testBackspaceCompare_optimal(s, t);
+
+        s = "ab##";
+        t = "c#d#";
+        testBackspaceCompare_bf(s, t);
+        testBackspaceCompare_optimal(s, t);
+    }
+
+    static void testBackspaceCompare_bf(String s, String t) {
         System.out.println("s = " + s);
         System.out.println("t = " + t);
         boolean isSameString = backspaceCompare_bruteForce(s, t);
         System.out.println("is same string (brute force): " + isSameString);
+    }
 
-//        isSameString = backspaceCompare_optimal(s, t);
-//        System.out.println("is same string: " + isSameString);
-
-
-//        s = "ab###bx#T";
-//        t = "att##bxz##T";
-
-        s = "##T";
-        t = "ab####T";
+    static void testBackspaceCompare_optimal(String s, String t) {
         System.out.println("s = " + s);
         System.out.println("t = " + t);
-        isSameString = backspaceCompare_optimal(s, t);
+        boolean isSameString = backspaceCompare_optimal(s, t);
         System.out.println("is same string (optimal): " + isSameString);
-
-//        s = "ab###bx#T";
-//        t = "att##bxz##T";
-//        System.out.println("s = " + s);
-//        System.out.println("t = " + t);
-//        isSameString = backspaceCompare_optimal(s, t);
-//        System.out.println("is same string (optimal): " + isSameString);
-
     }
 
     /**
@@ -41,19 +52,35 @@ public class BackspaceStringCompare {
      * Space complexity: O(N)
      */
     static String buildString(String s) {
-        List<Character> builtArray = new ArrayList<>();
-        for (int p = 0; p < s.length(); p++) {
-            if (s.charAt(p) != '#') {
-                builtArray.add(s.charAt(p));
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c != '#') {
+                stack.push(c);
             } else {
-                if (builtArray.size() > 0) {
-                    builtArray.remove(builtArray.size() - 1);
+                if (!stack.isEmpty()) {
+                    stack.pop();
                 }
             }
         }
-        return builtArray.toString();
+        return String.valueOf(stack);
+
+//        List<Character> builtArray = new ArrayList<>();
+//        for (int p = 0; p < s.length(); p++) {
+//            if (s.charAt(p) != '#') {
+//                builtArray.add(s.charAt(p));
+//            } else {
+//                if (builtArray.size() > 0) {
+//                    builtArray.remove(builtArray.size() - 1);
+//                }
+//            }
+//        }
+//        return builtArray.toString();
     }
 
+    /**
+     * Time complexity: O(N)
+     * Space complexity: O(N)
+     */
     static boolean backspaceCompare_bruteForce(String s, String t) {
         String finalS = buildString(s); // time: O(n), space: O(n)
         String finalT = buildString(t); // time: O(n), space: O(n)
@@ -106,8 +133,10 @@ public class BackspaceStringCompare {
                 }
             } else {
                 // regular char for both s and t case
-                if (s.charAt(p1) != t.charAt(p2)) {
+                if (!(p1 >= 0 && p2 >= 0) || s.charAt(p1) != t.charAt(p2)) {
                     return false;
+//                } else if (!(p1 >= 0 && p2 >= 0)) {
+//                    return false;
                 } else {
                     p1--;
                     p2--;
