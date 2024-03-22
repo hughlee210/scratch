@@ -7,12 +7,15 @@ public class MinimumCoinChange2 {
     public static void main(String[] args) {
 
         // 1st case
-//        int[] coins = {1, 2, 5};
-//        int amount = 11;
+        int[] coins = {1, 2, 5};
+        int amount = 11;
 
         // 2nd case
-        int[] coins = {2, 3, 5};
-        int amount = 6;
+//        int[] coins = {2, 3, 5};
+//        int amount = 6;
+
+//        int[] coins = {2};
+//        int amount = 3;
 
         minCoins_bruteForce(coins, amount);
 

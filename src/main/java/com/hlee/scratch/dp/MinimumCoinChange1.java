@@ -7,18 +7,21 @@ public class MinimumCoinChange1 {
     public static void main(String[] args) {
 
         // 1st case
-        int[] coins = {1, 2, 5};
-        int amount = 11;
+//        int[] coins = {1, 2, 5};
+//        int amount = 100;
 
         // 2nd case
 //        int[] coins = {2, 3, 5};
 //        int amount = 6;
 
-        minCoins_bruteForce(coins, amount);
+        int[] coins = {2};
+        int amount = 3;
+
+//        minCoins_bruteForce(coins, amount);
 
         minCoins_usingMemo(coins, amount); // doesn't work for 2nd case
 
-        minCoins_usingDPIterative(coins, amount);
+//        minCoins_usingDPIterative(coins, amount);
     }
 
     static void minCoins_bruteForce(int[] coins, int amount) {
@@ -52,7 +55,6 @@ public class MinimumCoinChange1 {
     }
 
     static void minCoins_usingMemo(int[] coins, int amount) {
-        //int[] memo = new int[amount + 1];
         int[] memo = new int[amount + 1];
         Arrays.fill(memo, -1);
         int minCoins = minCoinsDPMemoHelper(coins, amount, memo);
@@ -69,6 +71,7 @@ public class MinimumCoinChange1 {
      *      and in each of the recursive call we iterate through all the coins
      * Space complexity: O(a) where 'a' is the input amount.
      *                   recursive call stack memory
+     * I LIKE THIS ONE!
      */
     static int minCoinsDPMemoHelper(int[] coins, int amount, int[] memo) {
         if (amount == 0) {
