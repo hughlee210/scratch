@@ -1,10 +1,8 @@
-package com.hlee.scratch.corejava;
+package com.hlee.scratch.corejava.designpattern;
 
 import java.io.Serializable;
 
 public class Singleton implements Serializable {
-
-	// public static final Singleton INSTANCE = new Singleton();
 
 	private static final Singleton INSTANCE = new Singleton();
 

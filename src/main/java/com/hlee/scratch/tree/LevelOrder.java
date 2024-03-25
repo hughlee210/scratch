@@ -1,4 +1,4 @@
-package com.hlee.scratch.binarysearch;
+package com.hlee.scratch.tree;
 
 import java.util.*;
 
